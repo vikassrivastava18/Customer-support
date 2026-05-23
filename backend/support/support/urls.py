@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework.authtoken import views
 from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularSwaggerView,
                                    SpectacularRedocView)
@@ -23,10 +24,12 @@ from drf_spectacular.views import (SpectacularAPIView,
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-        # Schema Generation
-        path('schema/', SpectacularAPIView.as_view(), name='schema'),
-        # Swagger UI
-        path('docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-        # ReDoc UI
-        path('docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc')    
+    # Schema Generation
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Swagger UI
+    path('docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    # ReDoc UI
+    path('docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('login', views.obtain_auth_token, name='api-token'),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))    
 ]
