@@ -22,6 +22,7 @@ from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularRedocView)
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Schema Generation
@@ -31,5 +32,6 @@ urlpatterns = [
     # ReDoc UI
     path('docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('login', views.obtain_auth_token, name='api-token'),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))    
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', include('author.urls')),
 ]

@@ -18,8 +18,8 @@ class BookStatusType(models.TextChoices):
 class Book(models.Model):
     """
     A authors published books with key details: title, ISBN, genre,
-    publication date, status, MRP, total copies sold, total royalty earned, royalty paid, and royalty
-    pending.
+    publication date, status, MRP, total copies sold, total royalty earned,
+    royalty paid, and royalty pending.
     """
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=128)
