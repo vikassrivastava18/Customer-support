@@ -21,10 +21,9 @@
 </template>
 
 <script>
-// import { baseUrl } from '../../config';
-
+import { baseUrl } from '@/config';
 import { mapActions } from 'vuex';
-const baseUrl = ''
+
 
 export default {
     name: 'LoginComponent',
@@ -42,7 +41,7 @@ export default {
         ...mapActions('auth', ['login']),
         
         async submit() {            
-            const url = baseUrl + '/auth/login'
+            const url = baseUrl + '/login'
             const init_obj = {
                 method: 'POST',
                 headers: {

@@ -17,19 +17,12 @@ import { mapState } from 'vuex'
 export default {
     name: 'HeaderComponent',
     computed: {
-        // ...mapState('auth', ['isAuthenticated'])
+        ...mapState('auth', ['isAuthenticated'])
     },
     methods: {
         logout() {
-            this.$store.dispatch('confirm/openConfirm', {
-                title: 'Confirm Logout',
-                message: 'Are you sure you want to logout?',
-                confirmText: 'Logout',
-                onConfirm: () => {
-                    this.$store.dispatch('auth/logout')
-                    this.$router.push('/login')
-                }
-            })
+            this.$store.dispatch('auth/logout')
+            this.$router.push('/login')
         },
         login() {
             this.$router.push('/login')
