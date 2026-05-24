@@ -1,11 +1,13 @@
 <script setup>
+import ErrorComponent from './components/ErrorComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue'
 </script>
 
 <template>
 
   <HeaderComponent />
-
+  <ErrorComponent />
+  
   <main>
     <RouterView />
   </main>

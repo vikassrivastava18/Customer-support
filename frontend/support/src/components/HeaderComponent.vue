@@ -1,5 +1,4 @@
 <template>
-
         <div class="d-flex justify-content-between">
             <h3>BookLeaf Publishing</h3>
             <div class="text-end" v-if="isAuthenticated">
@@ -9,7 +8,6 @@
                 <button type="button" class="btn btn-danger me-4" @click="login">Login</button>
             </div>
         </div>
-
 </template>
 
 <script>
@@ -36,8 +34,8 @@ ul {
     float: right;
 }
 
-header {
-    margin-top: 0px;
+h3 {
+    color: #e76774;
 }
 
 .text_black {
