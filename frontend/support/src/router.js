@@ -3,10 +3,11 @@ import HomePage from './views/HomePage.vue'
 
 
 const routes = [
-    //   { path: '/', component: HomePage, meta: { requiresAuth: true } },
-    { path: '/', component: HomePage},
-    { path: '/login', component: () => import('./views/LoginPage.vue') },
-
+    { path: '/', component: HomePage, meta: { requiresAuth: true } },
+    { path: '/login', component: () => import('./views/LoginPage.vue')},
+    { path: '/tickets', component: () => import('./views/TicketsPage.vue'), meta: { requiresAuth: true }},
+    { path: '/create-ticket', component: () => import('./views/CreateTicket.vue'), meta: { requiresAuth: true }},
+    
 ]
 
 const router = createRouter({
@@ -14,17 +15,18 @@ const router = createRouter({
     routes,
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requiresAuth) {
-//     const token = localStorage.getItem('Authentication-Token');
-//     if (token) {
-//       next(); // User is authenticated, allow access
-//     } else {
-//       next('/login'); // Redirect to login page if not authenticated
-//     }
-//   } else {
-//     next(); // No authentication required, allow access
-//   }
-// });
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    const token = localStorage.getItem('Authentication-Token');
+    if (token) {
+      next(); // User is authenticated, allow access
+    } else {
+      next('/login'); // Redirect to login page if not authenticated
+    }
+  } else {
+    next(); // No authentication required, allow access
+  }
+});
 
 export default router

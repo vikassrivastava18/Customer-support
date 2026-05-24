@@ -1,13 +1,15 @@
 <script setup>
 import ErrorComponent from './components/ErrorComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue'
+import SuccessComponent from './components/SuccessComponent.vue'
 </script>
 
 <template>
 
   <HeaderComponent />
+  <SuccessComponent />
   <ErrorComponent />
-  
+
   <main>
     <RouterView />
   </main>

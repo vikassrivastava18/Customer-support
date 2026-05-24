@@ -1,17 +1,23 @@
 <template>
-        <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
+         <router-link to="/" class="nav-link text_white">
             <h3>BookLeaf Publishing</h3>
+         </router-link>
+        
 
-            <div style="position: relative; right: 250px;">
-                <button type="button" class="btn btn-primary" >Tickets</button>
-            </div>
-            <div class="text-end" v-if="isAuthenticated">
-                <button type="button" class="btn btn-danger me-4" @click="logout">Logout</button>
-            </div>
-            <div class="text-end" v-else>
-                <button type="button" class="btn btn-danger me-4" @click="login">Login</button>
-            </div>
+        <div style="position: relative; right: 275px;">
+            <router-link to="/tickets" class="nav-link text_white">
+                Tickets
+            </router-link>
+            
         </div>
+        <div class="text-end" v-if="isAuthenticated">
+            <button type="button" class="btn btn-danger me-4" @click="logout">Logout</button>
+        </div>
+        <div class="text-end" v-else>
+            <button type="button" class="btn btn-danger me-4" @click="login">Login</button>
+        </div>
+    </div>
 </template>
 
 <script>
