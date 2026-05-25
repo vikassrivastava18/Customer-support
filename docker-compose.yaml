@@ -1,0 +1,23 @@
+
+services:
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: django_backend
+    restart: always
+    environment:
+      - DEBUG=0
+      - ALLOWED_HOSTS=*
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: vue_frontend
+    restart: always
+    ports:
+      - "80:80"
