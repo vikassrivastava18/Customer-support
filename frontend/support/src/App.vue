@@ -46,7 +46,7 @@ header {
   }
 }
 main {
-  background-color: rgb(250, 250, 250);
+  background-color: #fff;
   min-height: 75vh;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <section class="p-4 mt-4 container">
+    <section class="container">
         <h4>All Tickets
             <router-link to="/create-ticket" style="display: inline; background-color: #fff;" class="p-2 pb-3 ms-3">
                 <img src="../assets/create.png" width="35" alt="Create new ticket">

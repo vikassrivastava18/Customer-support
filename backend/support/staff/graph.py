@@ -1,4 +1,4 @@
-import uuid
+from typing import Literal
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
@@ -6,10 +6,11 @@ from langgraph.graph import StateGraph, MessagesState, END
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, AIMessage
 
+from .prompt import INTENT_PROMPT, INFO_PROMPT
 from .schemas import IntentSchema
-from .models import AgentTicket, UserBookInfo
+from author.models import Ticket, Book
 from .knowledge import documents
 
 load_dotenv()
@@ -19,26 +20,37 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 
 # Define the tools
-def get_royality_timeline():
-    """Get the timeline for royality of a book.
-    """
-    isbn = "978-0-306-406"
-    book = UserBookInfo.objects.get(isbn=isbn)
-    return book.r_timeline
+def get_royality_earned(id):
+    """Get the royality earning for a book."""
+    book = Book.objects.get(id=id)
+    return book.royality_earned
 
+def get_royality_paid(id):
+    """Get the royality pending for a book.."""
+    book = Book.objects.get(id=id)
+    return book.royality_earned
 
-def get_book_live_status():
+def get_royality_pending(id):
+    """Get the royality pending for a book."""
+    book = Book.objects.get(id=id)
+    return book.royality_pending
+
+def get_book_live_status(isbn):
     """Get a book current live status
     """
     from datetime import date
-
-    isbn = "978-0-306-406"
-    book = UserBookInfo.objects.get(isbn=isbn)
-    return "Published" if book.book_live_date < date.today() else "Not published yet"
+    book = Book.objects.get(isbn=isbn)
+    return f"Published on {book.pub_date}" if book.pub_date < date.today() else f"Not published yet, publication date: {book.pub_date}"
 
 
-tools = [get_royality_timeline, get_book_live_status]
+tools = [get_royality_earned, get_royality_paid,
+         get_royality_pending, get_book_live_status]
+# Bind the tools
 llm_with_tools = llm.bind_tools(tools)
+
+# Define the graph state
+class State(MessagesState):
+    book: int
 
 
 def similarity_search(query):
@@ -53,7 +65,6 @@ def similarity_search(query):
 
     # unpack result
     doc, dist = results[0]
-
     context = doc.page_content
 
     return {
@@ -63,70 +74,50 @@ def similarity_search(query):
 
 
 # Define Nodes
-def start_graph(state: MessagesState) -> MessagesState:
+def start_graph(state: State) -> State:
     return state
 
 
-from typing import Literal
-
-
-def get_user_intent(state: MessagesState) -> Literal["info", "query"]:
-    prompt = f"""Based on the user query, decide the intent
-       It can only be either info or query. Info is general information regading the process and steps required for 
-       getting book published or how to use get something done, like how to upload book cover. Query is when user wants information regarding their book.
-       This requires seaching their book from database using SQL, so some data must already be in the database.
-       Sample: 
-           How to publish my book -> info
-           When am I getting my royalty for my book? -> query
-        query: {state["messages"][-1].content}       
-    """
+def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
+    prompt = INTENT_PROMPT
+    prompt += f"""/n Query: {state["messages"][-1].content}"""
     structured_llm = llm.with_structured_output(IntentSchema)
-
     response = structured_llm.invoke(prompt)
-
     return response.intent
 
 
-def assistant(state: MessagesState):
+def assistant(state: State) -> State:
     # System message
     sys_msg = SystemMessage(
-        content="You are a helpful assistant tasked with fetching relevant data for the user query.")
-    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
+    content="You are a helpful assistant tasked with fetching relevant data for the user query.")
+
+    llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
+    Ticket.objects.create(query=state["messages"][-1].content,
+                          book=state["book"],
+                          response=llm_response)
+    return {**state, "messages": [llm_response]}
 
 
-from langchain_core.messages import AIMessage
-from langgraph.types import interrupt
-
-
-def get_info(state: MessagesState) -> MessagesState:
+def get_info(state: State) -> State:
     query = state["messages"][0].content
     response = similarity_search(query)
-    print(response["distance"])
     if response["distance"] >= 0.8:
-
         # Save a ticket for Human agent in database
-        ticket_id = uuid.uuid4()
-        ticket = AgentTicket.objects.create(ticket_id=ticket_id, user_query=query)
-        # Add Human in the loop
-        response = interrupt(
-            # This value will be sent to the Human Agent
-            # as part of the interrupt information.
-            f"({ticket_id}) Passing you query to a human agent...."
-        )
+        Ticket.objects.create(query=query,
+                              book=state["book"])
     else:
         response = response["context"]
+        Ticket.objects.create(query=query,
+                              book=state["book"],
+                              response=response)
 
-    prompt = f"""Return a nice response based on user's query.
-    Response should not contain things like ##, **. But do not  remove icons ✍️ that are present. 
-    Rather format the response like : <p>.....</p> <p>....</p>
-    Query: {query}
-    Resonse: {response}
-    """
+    prompt = INFO_PROMPT
+
+    prompt += f"""/n Query: {query}. Resonse: {response}"""
     llm_response = llm.invoke(prompt)
     return {
-        "messages": [
-            AIMessage(content=llm_response.content)
-        ]
+        **state,
+        "messages": [AIMessage(content=llm_response.content)]
     }
 
 
