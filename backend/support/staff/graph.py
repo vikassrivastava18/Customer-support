@@ -35,12 +35,12 @@ def get_royality_pending(id):
     book = Book.objects.get(id=id)
     return book.royality_pending
 
-def get_book_live_status(isbn):
+def get_book_live_status(id):
     """Get a book current live status
     """
     from datetime import date
-    book = Book.objects.get(isbn=isbn)
-    return f"Published on {book.pub_date}" if book.pub_date < date.today() else f"Not published yet, publication date: {book.pub_date}"
+    book = Book.objects.get(id=id)
+    return f"Already published on {book.pub_date}" if book.pub_date < date.today() else f"Not published yet, publication date: {book.pub_date}"
 
 
 tools = [get_royality_earned, get_royality_paid,
@@ -80,7 +80,7 @@ def start_graph(state: State) -> State:
 
 def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
     prompt = INTENT_PROMPT
-    prompt += f"""/n Query: {state["messages"][-1].content}"""
+    prompt += f"""/n Query: {state["messages"][0].content}"""
     structured_llm = llm.with_structured_output(IntentSchema)
     response = structured_llm.invoke(prompt)
     return response.intent
@@ -89,26 +89,38 @@ def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
 def assistant(state: State) -> State:
     # System message
     sys_msg = SystemMessage(
-    content="You are a helpful assistant tasked with fetching relevant data for the user query.")
+    content=f"You are a helpful assistant tasked with fetching relevant data for the user query. Book id: {state["book"]}")
 
     llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
-    Ticket.objects.create(query=state["messages"][-1].content,
-                          book=state["book"],
-                          response=llm_response)
+    book = Book.objects.get(id=state["book"])
+    Ticket.objects.create(query=state["messages"][0].content,
+                          book=book,
+                          response=llm_response.content)
     return {**state, "messages": [llm_response]}
+
+
+def register_complaint(state: State) -> State:
+    book, query = state["book"], state["messages"][0].content
+    book = Book.objects.get(id=state["book"])
+    Ticket.objects.create(query=query,
+                          book=book,
+                          response='Sorry about that, we have registered your complaint.')
+    response = AIMessage(content='Sorry about that, we have registered your complaint.')
+    return {**state, "messages": [response]}
 
 
 def get_info(state: State) -> State:
     query = state["messages"][0].content
     response = similarity_search(query)
+    book = Book.objects.get(id=state["book"])
     if response["distance"] >= 0.8:
         # Save a ticket for Human agent in database
         Ticket.objects.create(query=query,
-                              book=state["book"])
+                              book=book)
     else:
         response = response["context"]
         Ticket.objects.create(query=query,
-                              book=state["book"],
+                              book=book,
                               response=response)
 
     prompt = INFO_PROMPT
@@ -125,12 +137,13 @@ def build_graph():
     from langgraph.prebuilt import tools_condition, ToolNode
     from langgraph.graph import START
 
-    builder = StateGraph(MessagesState)
+    builder = StateGraph(State)
 
     builder.add_node("start_graph", start_graph)
     builder.add_node("get_info", get_info)
 
     builder.add_node("assistant", assistant)
+    builder.add_node("register_complaint", register_complaint)
     builder.add_node("tools", ToolNode(tools))
 
     builder.add_edge(START, "start_graph")
@@ -139,7 +152,8 @@ def build_graph():
         get_user_intent,
         {
             "info": "get_info",
-            "query": "assistant"
+            "query": "assistant",
+            "complaint": "register_complaint"
         }
     )
     builder.add_conditional_edges(

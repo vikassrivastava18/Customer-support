@@ -1,5 +1,6 @@
 <template>
-    <div class="d-flex justify-content-between p-1" style="border: 2px dotted black;">
+    <div class="d-flex justify-content-between p-1" style="border: 1px solid black;
+        background-color: #404040;">
          <router-link to="/" class="nav-link text_white">
             <h3>BookLeaf Publishing</h3>
          </router-link>
