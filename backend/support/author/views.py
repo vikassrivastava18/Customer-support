@@ -29,7 +29,7 @@ class TicketListView(generics.ListAPIView):
         )
 
 
-class TicketCreateView(generics.UpdateAPIView):
+class TicketCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     queryset = Ticket.objects.all()

@@ -2,8 +2,10 @@
     <section class="p-4 mt-4 container">
 
         <h4>Create Ticket</h4>
-
-        <form class="p-4" @submit.prevent="submitTicket">
+        <div v-if="isLoading">
+            <LoaderComponent />
+        </div>
+        <form v-else class="p-4" @submit.prevent="submitTicket">
 
             <!-- Book Select -->
             <div class="mb-3">
@@ -45,18 +47,21 @@
             </button>
 
         </form>
-
+        
+    
     </section>
 </template>
 
 <script setup>
+import LoaderComponent from '@/components/LoaderComponent.vue'
 import { baseUrl } from '@/config'
 import { getCurrentInstance } from 'vue'
-import { reactive } from 'vue'
-
+import { reactive, ref } from 'vue'
 
 const instance = getCurrentInstance()
 const proxy = instance && instance.proxy
+
+const isLoading = ref(false)
 
 const form = reactive({
     book_id: '',
@@ -76,20 +81,21 @@ const submitTicket = async () => {
         formData.append('book', form.book_id)
         formData.append('query', form.title)
         // formData.append('description', form.description)
-
+        isLoading.value = true
         const response = await proxy.$axios.post(
             url,
             formData
         )
-
+        proxy.$router.push('/tickets')
         proxy.$store.dispatch('success/showSucsess', {
-            title: 'Update Successful',
+            title: 'Ticket Created',
             message: 'Item updated successfully.'
         })
-
+        
     } catch (error) {
         console.error('Error creating ticket:', error)
-        alert('Failed to submit ticket')
+    } finally {
+        isLoading.value = false;
     }
 }
 </script>
