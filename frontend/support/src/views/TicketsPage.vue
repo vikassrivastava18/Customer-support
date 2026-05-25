@@ -1,5 +1,5 @@
 <template>
-    <section class="p-4 mt-4 container">
+    <section class="container">
         <h4>My Tickets
             <router-link to="/create-ticket"
                 style="display: inline; background-color: #fff;"
@@ -13,8 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
-                    <p><b>Status</b>: {{ ticket.status_display }}</p>
-                    
+                    <p><b>Status</b>: {{ ticket.status_display }}</p>                    
                 </div>
             </div>
         </div>
@@ -50,8 +49,5 @@ async function getTickets() {
 </script>
 
 <style>
-.container {
-    border: 1px solid #fff;
-    min-height: 75vh;
-}
+
 </style>

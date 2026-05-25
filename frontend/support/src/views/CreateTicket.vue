@@ -1,5 +1,5 @@
 <template>
-    <section class="p-4 mt-4 container">
+    <section class="container">
 
         <h4>Create Ticket</h4>
         <div v-if="isLoading">
@@ -47,8 +47,7 @@
             </button>
 
         </form>
-        
-    
+            
     </section>
 </template>
 

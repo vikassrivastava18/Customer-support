@@ -1,13 +1,13 @@
 <template>
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between p-1" style="border: 1px solid black;">
          <router-link to="/" class="nav-link text_white">
             <h3>BookLeaf Publishing</h3>
          </router-link>
         
 
         <div style="position: relative; right: 275px;">
-            <router-link to="/tickets" class="nav-link text_white">
-                Tickets
+            <router-link to="/tickets" class="nav-link">
+               <h4> Tickets </h4>
             </router-link>
             
         </div>
@@ -44,7 +44,7 @@ ul {
     float: right;
 }
 
-h3 {
+h3, h4 {
     color: #e76774;
 }
 

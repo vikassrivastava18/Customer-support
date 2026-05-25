@@ -1,6 +1,6 @@
 <template>
-    <section class="p-4 mt-4 container">
-        <h4>My Books</h4>
+    <section class="container">
+        <h4 style="color: #000;">My Books</h4>
         <div class="d-flex flex-row mb-3">
             <div v-for="book in books" :key="book.id" class="card mt-4 mx-4" style="width: 18rem;">
                 <div class="card-body">
@@ -45,8 +45,5 @@ async function getBooks() {
 </script>
 
 <style>
-.container {
-    border: 1px solid #fff;
-    min-height: 75vh;
-}
+
 </style>

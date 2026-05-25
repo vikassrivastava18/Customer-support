@@ -10,8 +10,11 @@ import SuccessComponent from './components/SuccessComponent.vue'
   <SuccessComponent />
   <ErrorComponent />
 
-  <main>
-    <RouterView />
+  <main class="card mt-4">
+    <div class="card-body">
+      <RouterView />
+    </div>
+
   </main>
 </template>
 
@@ -41,5 +44,9 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+}
+main {
+  background-color: rgb(250, 250, 250);
+  min-height: 75vh;
 }
 </style>
