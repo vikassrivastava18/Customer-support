@@ -10,7 +10,7 @@ import SuccessComponent from './components/SuccessComponent.vue'
   <SuccessComponent />
   <ErrorComponent />
 
-  <main class="card mt-4">
+  <main class="card mt-2">
     <div class="card-body">
       <RouterView />
     </div>
