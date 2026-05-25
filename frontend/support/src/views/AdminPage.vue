@@ -12,11 +12,11 @@
                     <p><b>Query</b>: {{ ticket.query }}</p>
                     <p><b>Status</b>: {{ ticket.status_display }}</p>
                     <div class="mt-3">
-                        <textarea name="detailed-message" rows="4" cols="50" 
-                            placeholder="Type response and press Enter"
-                            class="form-control" v-model="ticket.response"
-                            @keyup.enter="sendResponse(ticket)"></textarea>
+                        <textarea name="detailed-message" rows="4" cols="50" placeholder="Type response and press Enter"
+                            class="form-control" v-model="ticket.response"></textarea>
+                        <button class="btn btn-primary" @click="sendResponse(ticket)">Submit</button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -25,57 +25,69 @@
 
 <script setup>
 import { baseUrl } from '@/config'
-import { onMounted, getCurrentInstance, ref } from 'vue'
+import { onMounted, onUnmounted, getCurrentInstance, ref } from 'vue'
 
 const instance = getCurrentInstance()
 const proxy = instance && instance.proxy
 const tickets = ref([])
-
+let ticketInterval = null
 
 onMounted(() => {
     getTickets()
+    ticketInterval = setInterval(getTickets, 10000)
 })
 
+onUnmounted(() => {
+    if (ticketInterval) {
+        clearInterval(ticketInterval)
+    }
+})
 
 async function getTickets() {
     const url = baseUrl + '/staff/tickets'
     try {
 
         const res = await proxy.$axios.get(url)
-        console.log("Tickets data: ", res);
         tickets.value = res.data.map(ticket => ({
-            ...ticket,
-            response: ''
+            ...ticket
         }))
 
     } catch (error) {
         console.error('Error:', error.message)
         proxy.$store.dispatch('error/showError', {
-            title: 'You do not have access to this page',
-            message: 'Please login as staff.'
+            title: 'Please login as staff.',
+            message: 'You do not have access to this page'
         })
-    }}
-
-    async function sendResponse(ticket) {
-        if (!ticket.response || !ticket.response.trim()) {
-            return
-        }
-
-        const url = baseUrl + '/staff-response'
-        try {
-            await proxy.$axios.post(url, {
-                ticket_id: ticket.id,
-                message: ticket.response.trim()
-            })
-            ticket.response = ''
-        } catch (error) {
-            console.error('Error sending response:', error.message)
-            proxy.$store.dispatch('error/showError', {
-                title: 'Unable to send response',
-                message: 'Please try again later.'
-            })
-        }
     }
+}
+
+async function sendResponse(ticket) {
+    if (!ticket.response || !ticket.response.trim()) {
+        return
+    }
+    
+    const url = baseUrl + `/staff/tickets/${ticket.id}`
+    console.log(ticket.id);
+    console.log(ticket.query);
+    console.log(ticket.response);
+    
+        
+    try {
+        await proxy.$axios.put(url, {
+            id: ticket.id,
+            query: ticket.query,
+            response: ticket.response.trim(),
+            status: 're'
+        })
+        ticket.response = ''
+    } catch (error) {
+        console.error('Error sending response:', error.message)
+        proxy.$store.dispatch('error/showError', {
+            title: 'Unable to send response',
+            message: 'Please try again later.'
+        })
+    }
+}
 </script>
 
 <style>

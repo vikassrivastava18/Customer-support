@@ -13,7 +13,8 @@
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
-                    <p><b>Status</b>: {{ ticket.status_display }}</p>                    
+                    <p :style="{ color: ticket.status_display === 'Resolved' ? 'green' : 'inherit' }"><b>Status</b>: {{ ticket.status_display }}</p>
+                    <p v-if="ticket.status_display == 'Resolved'"><b>Response</b>: {{ ticket.response }}</p>                    
                 </div>
             </div>
         </div>
@@ -27,10 +28,11 @@ import { onMounted, getCurrentInstance, ref } from 'vue'
 const instance = getCurrentInstance()
 const proxy = instance && instance.proxy
 const tickets = ref([])
-
+let ticketInterval = null
 
 onMounted(() => {
     getTickets()
+    ticketInterval = setInterval(getTickets, 5000)
 })
 
 

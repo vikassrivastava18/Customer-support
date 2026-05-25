@@ -35,16 +35,18 @@ def get_royality_pending(id):
     book = Book.objects.get(id=id)
     return book.royality_pending
 
-def get_book_live_status(id):
+def get_book_publish_status(id):
     """Get a book current live status
     """
     from datetime import date
+    print("ID: ", id)
     book = Book.objects.get(id=id)
-    return f"Already published on {book.pub_date}" if book.pub_date < date.today() else f"Not published yet, publication date: {book.pub_date}"
+    return f"Already published on {book.pub_date}" if book.pub_date < date.today() else (f"Not published yet, "
+                                                                                         f"publication date: {book.pub_date}")
 
 
 tools = [get_royality_earned, get_royality_paid,
-         get_royality_pending, get_book_live_status]
+         get_royality_pending, get_book_publish_status]
 # Bind the tools
 llm_with_tools = llm.bind_tools(tools)
 
@@ -93,18 +95,11 @@ def assistant(state: State) -> State:
 
     llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
     book = Book.objects.get(id=state["book"])
-    Ticket.objects.create(query=state["messages"][0].content,
-                          book=book,
-                          response=llm_response.content)
+
     return {**state, "messages": [llm_response]}
 
 
 def register_complaint(state: State) -> State:
-    book, query = state["book"], state["messages"][0].content
-    book = Book.objects.get(id=state["book"])
-    Ticket.objects.create(query=query,
-                          book=book,
-                          response='Sorry about that, we have registered your complaint.')
     response = AIMessage(content='Sorry about that, we have registered your complaint.')
     return {**state, "messages": [response]}
 
@@ -115,13 +110,9 @@ def get_info(state: State) -> State:
     book = Book.objects.get(id=state["book"])
     if response["distance"] >= 0.8:
         # Save a ticket for Human agent in database
-        Ticket.objects.create(query=query,
-                              book=book)
+        response = ""
     else:
         response = response["context"]
-        Ticket.objects.create(query=query,
-                              book=book,
-                              response=response)
 
     prompt = INFO_PROMPT
 

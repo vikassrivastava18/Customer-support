@@ -65,7 +65,7 @@ class Ticket(models.Model):
         choices=TicketStatus.choices,
         default=TicketStatus.PROGRESS
     )
-    response = models.CharField(max_length=512, null=True, blank=True)
+    response = models.CharField(max_length=2048, null=True, blank=True)
 
     def __str__(self) -> str:
         return f'{self.book.title}, Query: {self.query}, Status: {self.status}'

@@ -19,7 +19,7 @@ class TicketListSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Ticket
-        fields = ['query', 'book', 'status_display']
+        fields = ['query', 'book', 'status_display', 'response']
 
 
 class TicketCreateSerializer(serializers.ModelSerializer):

@@ -29,7 +29,6 @@ export default {
   name: 'ErrorComponent',
   setup() {
     const store = useStore()
-
     const error = computed(() => store.state.error.errorToast)
 
     // Auto-hide after 4 seconds
