@@ -1,14 +1,5 @@
 from rest_framework import serializers
-from .models import Book, Ticket
-
-
-class BookSerializer(serializers.ModelSerializer):
-    genre_display = serializers.CharField(
-        source='get_genre_display'
-    )
-    class Meta:
-        model = Book
-        fields = '__all__'
+from author.models import Book, Ticket
 
 
 class TicketListSerializer(serializers.ModelSerializer):
@@ -22,7 +13,7 @@ class TicketListSerializer(serializers.ModelSerializer):
         fields = ['query', 'book', 'status_display']
 
 
-class TicketCreateSerializer(serializers.ModelSerializer):
+class TicketUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = ['query', 'book']
+        fields = ['query', 'book', 'response']

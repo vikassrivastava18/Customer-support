@@ -7,8 +7,9 @@
                     <h5 class="card-title"><b>Title</b>: {{ book.title }}</h5>
                     <p class="card-text"><b>ISBN</b>: {{ book.isbn }}</p>
                     <p class="card-text"><b>Publication Date</b>: {{ book.pub_date }}</p>
-                    <p class="card-text"><b>Genre</b>: {{ book.genre }}</p>
-
+                    <p class="card-text"><b>Genre</b>: {{ book.genre_display }}</p>
+                    <p class="card-text"><b>MRP</b>: {{ book.mrp }}</p>
+                    <p class="card-text"><b>Publication Date</b>: {{ book.pub_date }}</p>
                 </div>
             </div>
         </div>

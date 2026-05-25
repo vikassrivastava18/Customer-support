@@ -3,10 +3,8 @@
         <h4>My Tickets
             <router-link to="/create-ticket"
                 style="display: inline; background-color: #fff;"
-                class="p-2 pb-3 ms-3">
-        
-                    <img src="../assets/create.png" width="40" alt="Create new ticket">
-                
+                class="p-2 pb-3 ms-3">        
+                    <img src="../assets/create.png" width="35" alt="Create new ticket">                
             </router-link>
 
         </h4>
@@ -15,6 +13,8 @@
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
+                    <p><b>Status</b>: {{ ticket.status_display }}</p>
+                    
                 </div>
             </div>
         </div>

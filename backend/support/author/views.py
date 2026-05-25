@@ -1,8 +1,10 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import (SessionAuthentication,
                                            TokenAuthentication)
-from .serializers import BookSerializer, TicketListSerializer, TicketCreateSerializer
+from .serializers import (BookSerializer,
+                          TicketListSerializer,
+                          TicketCreateSerializer)
 from .models import Book, Ticket
 # Create your views here.
 
@@ -12,7 +14,6 @@ class BookListView(generics.ListAPIView):
     serializer_class = BookSerializer
 
     def get_queryset(self):
-        # Return only books for the authenticated user
         return Book.objects.filter(author=self.request.user)
 
 
@@ -28,7 +29,7 @@ class TicketListView(generics.ListAPIView):
         )
 
 
-class TicketCreateView(generics.CreateAPIView):
+class TicketCreateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     queryset = Ticket.objects.all()
@@ -38,4 +39,5 @@ class TicketCreateView(generics.CreateAPIView):
         return Ticket.objects.filter(
             book__author=self.request.user
         )
+
 

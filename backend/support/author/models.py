@@ -17,7 +17,7 @@ class BookStatusType(models.TextChoices):
 
 class Book(models.Model):
     """
-    A authors published books with key details: title, ISBN, genre,
+    An author published books with key details: title, ISBN, genre,
     publication date, status, MRP, total copies sold, total royalty earned,
     royalty paid, and royalty pending.
     """

@@ -11,8 +11,8 @@
 
                 <select class="form-select" id="bookSelect" v-model="form.book_id" required>
                     <option disabled value="">Choose a book...</option>
-                    <option value="1">The Great Gatsby</option>
-                    <option value="3">To Kill a Mockingbird</option>
+                    <option value="3">The Great Gatsby</option>
+                    <option value="4">To Kill a Mockingbird</option>
                 </select>
             </div>
 
@@ -51,9 +51,8 @@
 
 <script setup>
 import { baseUrl } from '@/config'
-import { onMounted, getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance } from 'vue'
 import { reactive } from 'vue'
-
 
 
 const instance = getCurrentInstance()
@@ -74,7 +73,7 @@ const submitTicket = async () => {
     try {
         const url = baseUrl + "/create-ticket"
         const formData = new FormData()
-        formData.append('book', 1)
+        formData.append('book', form.book_id)
         formData.append('query', form.title)
         // formData.append('description', form.description)
 
@@ -82,7 +81,6 @@ const submitTicket = async () => {
             url,
             formData
         )
-
 
         proxy.$store.dispatch('success/showSucsess', {
             title: 'Update Successful',
