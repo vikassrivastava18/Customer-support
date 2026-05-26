@@ -29,13 +29,13 @@ class Book(models.Model):
         choices=GenreType.choices,
         default=GenreType.FICTION
     )
-    pub_date = models.DateField()
+    pub_date = models.DateField(null=True, blank=True)
     status = models.CharField(
         max_length=2,
         choices=BookStatusType.choices,
         default=BookStatusType.REVIEW
     )
-    mrp = models.IntegerField()
+    mrp = models.IntegerField(null=True, blank=True)
     copies_sold = models.IntegerField(default=0)
     royality_earned = models.IntegerField(default=0)
     royality_paid = models.IntegerField(default=0)
