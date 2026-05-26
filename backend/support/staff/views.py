@@ -45,9 +45,11 @@ class AddJsonDataView(APIView):
                     user = User.objects.get(email=author["email"])
                 except User.DoesNotExist:
                     username = "_".join(author["name"].split())
-                    user = User.objects.create(username=username,
-                                               email=author["email"],
-                                               password="hellYeah2020")
+                    user = User.objects.create_user(
+                        username=username,
+                        email=author["email"],
+                        password="hellYeah2020"
+                    )
 
                 for book in author["books"]:
                     Book.objects.create(author=user,

@@ -13,8 +13,7 @@
 
                 <select class="form-select" id="bookSelect" v-model="form.book_id" required>
                     <option disabled value="">Choose a book...</option>
-                    <option value="3">The Great Gatsby</option>
-                    <option value="4">To Kill a Mockingbird</option>
+                    <option v-for="book in books" :key="book.id" :value="book.id">{{ book.title }}</option>
                 </select>
             </div>
 
@@ -55,12 +54,30 @@
 import LoaderComponent from '@/components/LoaderComponent.vue'
 import { baseUrl } from '@/config'
 import { getCurrentInstance } from 'vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 
 const instance = getCurrentInstance()
 const proxy = instance && instance.proxy
 
+const books = ref([])
 const isLoading = ref(false)
+
+onMounted(() => {
+    getBooks()
+})
+
+async function getBooks() {
+    const url = baseUrl + '/books'
+    try {
+
+        const res = await proxy.$axios.get(url)
+        console.log("Books data: ", res);
+        books.value = res.data
+
+    } catch (error) {
+        console.error('Error:', error.message)
+    }
+}
 
 const form = reactive({
     book_id: '',
