@@ -1,6 +1,6 @@
 <template>    
     <div class="loginC">        
-        <form @submit.prevent="submit" class="p-4">
+        <form @submit.prevent="submit" class="p-4 mt-4">
             <h2 class="p-2 mt-0">Login</h2>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Username</label>
