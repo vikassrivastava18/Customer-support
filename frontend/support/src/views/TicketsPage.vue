@@ -32,9 +32,14 @@ let ticketInterval = null
 
 onMounted(() => {
     getTickets()
-    ticketInterval = setInterval(getTickets, 5000)
+    ticketInterval = setInterval(getTickets, 10000)
 })
 
+onUnmounted(() => {
+    if (ticketInterval) {
+        clearInterval(ticketInterval)
+    }
+})
 
 async function getTickets() {
     const url = baseUrl + '/tickets'
