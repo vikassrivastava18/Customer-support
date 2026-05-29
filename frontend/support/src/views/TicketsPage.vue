@@ -13,8 +13,10 @@
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
-                    <p :style="{ color: ticket.status_display === 'Resolved' ? 'green' : 'inherit' }"><b>Status</b>: {{ ticket.status_display }}</p>
-                    <p v-if="ticket.status_display == 'Resolved'"><b>Response</b>: {{ ticket.response }}</p>                    
+                    <p :style="{ color: ticket.status_display === 'Resolved' ? 'green' : 'inherit' }">
+                        <b>Status</b>: {{ ticket.status_display }}</p>
+                    <p v-if="ticket.status_display == 'Resolved'">
+                        <b>Response</b>: {{ ticket.response }}</p>                    
                 </div>
             </div>
         </div>
@@ -23,7 +25,7 @@
 
 <script setup>
 import { baseUrl } from '@/config'
-import { onMounted, getCurrentInstance, ref } from 'vue'
+import { onMounted, onUnmounted, getCurrentInstance, ref } from 'vue'
 
 const instance = getCurrentInstance()
 const proxy = instance && instance.proxy
