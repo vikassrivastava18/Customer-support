@@ -1,6 +1,6 @@
 # Customer Support
 
-This repository contains the "customer-support" application — an assignment project for BookLeaf. The app is a simple, practical example of a customer support system that demonstrates best practices for building, running, and testing a small web service.
+This repository contains the "customer-support" application. The app is a simple, practical example that demonstrates near real time customer support.
 
 ## Table of Contents
 - About
@@ -13,7 +13,7 @@ This repository contains the "customer-support" application — an assignment pr
 
 ## About
 
-The Customer Support application provides a foundation for handling user inquiries, tracking tickets, and demonstrating basic API and UI patterns. It is intended as a learning and evaluation project for BookLeaf.
+The Customer Support application provides a foundation for handling user inquiries, tracking tickets, and demonstrating basic API and UI patterns. 
 
 ## Key Features
 
