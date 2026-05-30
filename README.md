@@ -1,6 +1,6 @@
 # Customer Support
 
-This repository contains the "customer-support" application. The app is a simple, practical example that demonstrates near real time customer support.
+This repository contains the "customer-support" application — an assignment project for BookLeaf. The app is a simple, practical example of a customer support system that demonstrates best practices for building, running, and testing a small web service.
 
 ## Table of Contents
 - About
@@ -9,11 +9,13 @@ This repository contains the "customer-support" application. The app is a simple
 - Installation
 - ERD
 - Configuration
+- Author Login
+- Staff Login
 
 
 ## About
 
-The Customer Support application provides a foundation for handling user inquiries, tracking tickets, and demonstrating basic API and UI patterns. 
+The Customer Support application provides a foundation for handling user inquiries, tracking tickets, etc. It is intended as a learning and evaluation project for BookLeaf.
 
 ## Key Features
 
@@ -24,81 +26,51 @@ The Customer Support application provides a foundation for handling user inquiri
 
 ## Tech Stack
 
-- Language: ( Python )
-- Web framework: (Django)
+- Language: (Python, JavaScript)
+- Web framework: (Django, Vue)
 - Data store: (SQLite/PostgreSQL)
 - AI Agent: (LangChain/LangGraph)
 
 ## ERD
 
 `
-+--------------------+
-|      User          |
-|--------------------|
-| id (PK)            |
-| username           |
-| email              |
-| ...                |
-+--------------------+
-          |
-          | 1
-          |
-          | *
-+-----------------------------+
-|            Book             |
-|-----------------------------|
-| id (PK)                    |
-| author_id (FK -> User.id)  |
-| title                      |
-| isbn                       |
-| genre                      |
-| pub_date                   |
-| status                     |
-| mrp                        |
-| copies_sold                |
-| royality_earned            |
-| royality_paid              |
-| royality_pending           |
-+-----------------------------+
-          |
-          | 1
-          |
-          | *
-+-----------------------------+
-|           Ticket            |
-|-----------------------------|
-| id (PK)                    |
-| query                      |
-| book_id (FK -> Book.id)    |
-| status                     |
-| response                   |
-+-----------------------------+
++--------------------+        +-----------------------------+        +-----------------------------+
+|       User         | 1    * |            Book             | 1    * |           Ticket            |
+|--------------------|--------|-----------------------------|--------|-----------------------------|
+| id (PK)            |        | id (PK)                    |        | id (PK)                    |
+| username           |        | author_id (FK -> User.id)  |        | query                      |
+| email              |        | title                      |        | book_id (FK -> Book.id)    |
+| ...                |        | isbn                       |        | status                     |
++--------------------+        | genre                      |        | response                   |
+                              | pub_date                   |        +-----------------------------+
+                              | status                     |
+                              | mrp                        |
+                              | copies_sold                |
+                              | royality_earned            |
+                              | royality_paid              |
+                              | royality_pending           |
+                              +-----------------------------+
 `
 
 
 ## Installation
 
-1. Clone the repository:
-
-	unzip the folder
-
-2. Install dependencies:
-    cd frontend
-	npm install
-    npm run dev
-
-3. Python installation:
-    cd backend
-	python -m venv venv
-	source venv/bin/activate  # or venv\Scripts\activate on Windows
-	pip install -r requirements.txt
-    cd support
-    python manage.py runserver
+docker compose up --build -d
 
 Update these steps to match the project's actual dependency manager and commands.
 
 ## Configuration
 
-- Copy any example environment file if available (e.g., .env.example -> .env) and update settings such as database connection, ports, and secrets.
+- Copy any example environment file if available (e.g., .env.example -> .env).
 - Ensure required environment variables are set before running the app.
 
+## Author Login
+Login with author username by combining first as last name with _
+Example - Sneha_Kulkarni
+password - hellYeah2020
+
+## Staff Login
+
+Login with following credentials to resolve tickets (Open staff in seperate window).
+- username: vikas@gmail.com
+  password: hello2020
