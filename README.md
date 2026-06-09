@@ -34,22 +34,18 @@ The Customer Support application provides a foundation for handling user inquiri
 ## ERD
 
 `
+
 +--------------------+        +-----------------------------+        +-----------------------------+
 |       User         | 1    * |            Book             | 1    * |           Ticket            |
 |--------------------|--------|-----------------------------|--------|-----------------------------|
-| id (PK)            |        | id (PK)                    |        | id (PK)                    |
-| username           |        | author_id (FK -> User.id)  |        | query                      |
-| email              |        | title                      |        | book_id (FK -> Book.id)    |
-| ...                |        | isbn                       |        | status                     |
-+--------------------+        | genre                      |        | response                   |
-                              | pub_date                   |        +-----------------------------+
-                              | status                     |
-                              | mrp                        |
-                              | copies_sold                |
-                              | royality_earned            |
-                              | royality_paid              |
-                              | royality_pending           |
+| id (PK)            |        | id (PK)                     |        | id (PK)                     |
+| username           |        | author_id (FK -> User.id)   |        | query                       |
+| email              |        | title                       |        | book_id (FK -> Book.id)     |
+| ...                |        | isbn                        |        | status                      |
++--------------------+        | genre                       |        | response                    |
+                              | pub_date                    |        +-----------------------------+                            
                               +-----------------------------+
+
 `
 
 
