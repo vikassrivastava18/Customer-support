@@ -33,7 +33,7 @@ The Customer Support application provides a foundation for handling user inquiri
 
 ## ERD
 
-`
+```
 
 +--------------------+        +-----------------------------+        +-----------------------------+
 |       User         | 1    * |            Book             | 1    * |           Ticket            |
@@ -44,7 +44,7 @@ The Customer Support application provides a foundation for handling user inquiri
 | ...                |        | isbn                        |        | status                      |
 +--------------------+        | ...                         |        | response                    |                               
                               
-`
+```
 
 
 ## Installation
