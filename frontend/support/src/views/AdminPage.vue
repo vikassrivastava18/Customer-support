@@ -5,7 +5,7 @@
                 <img src="../assets/create.png" width="35" alt="Create new ticket">
             </router-link>
         </h4>
-        <div class="d-flex flex-row mb-3">
+        <div class="d-flex flex-row flex-wrap mb-3">
             <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
