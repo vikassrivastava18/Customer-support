@@ -42,7 +42,9 @@ The Customer Support application provides a foundation for handling user inquiri
 | username           |        | author_id (FK -> User.id)   |        | query                       |
 | email              |        | title                       |        | book_id (FK -> Book.id)     |
 | ...                |        | isbn                        |        | status                      |
-+--------------------+        | ...                         |        | response                    |                               
++--------------------+        | genre                       |        | response                    |
+                              | pub_date                    |        +-----------------------------+                            
+                              +-----------------------------+                          
                               
 ```
 
