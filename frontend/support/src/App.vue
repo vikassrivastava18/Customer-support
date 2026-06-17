@@ -1,9 +1,3 @@
-<script setup>
-import ErrorComponent from './components/ErrorComponent.vue';
-import HeaderComponent from './components/HeaderComponent.vue'
-import SuccessComponent from './components/SuccessComponent.vue'
-</script>
-
 <template>
 
   <HeaderComponent />
@@ -14,9 +8,24 @@ import SuccessComponent from './components/SuccessComponent.vue'
     <div class="card-body">
       <RouterView />
     </div>
+  
+  <ChatComponent />
+
 
   </main>
+
+  
 </template>
+
+<script setup>
+
+import ChatComponent from './components/ChatComponent.vue';
+import ErrorComponent from './components/ErrorComponent.vue';
+import HeaderComponent from './components/HeaderComponent.vue'
+import SuccessComponent from './components/SuccessComponent.vue'
+
+
+</script>
 
 <style scoped>
 header {
@@ -45,6 +54,7 @@ header {
     flex-wrap: wrap;
   }
 }
+
 main {
   background-color: #fff;
   min-height: 75vh;

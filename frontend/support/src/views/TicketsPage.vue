@@ -9,7 +9,9 @@
 
         </h4>
         <div class="d-flex flex-row flex-wrap mb-3">
-            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
+            <div v-for="ticket in tickets" class="card mt-4 mx-4"
+            :key="ticket.id" 
+            style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
@@ -46,9 +48,7 @@ onUnmounted(() => {
 async function getTickets() {
     const url = baseUrl + '/tickets'
     try {
-
         const res = await proxy.$axios.get(url)
-        console.log("Tickets data: ", res);
         tickets.value = res.data
 
     } catch (error) {
