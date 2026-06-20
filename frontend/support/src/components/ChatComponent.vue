@@ -62,7 +62,7 @@ const submitForm = async () => {
         if (response.status === 200) {
             const data = response.data
             const resultText = data;
-            document.querySelector('.queryResults').innerHTML = `<p>Question: ${query.value}` + `<p>Answer: ${resultText}</p>` + document.querySelector('.queryResults').innerHTML;
+            document.querySelector('.queryResults').innerHTML = `<p>Answer: ${resultText}</p>` + document.querySelector('.queryResults').innerHTML;
         }
 
     } catch (error) {
@@ -72,6 +72,7 @@ const submitForm = async () => {
         })
     } finally {
         disableChatBtn.value = false
+        form.query = ""
     }
 
 }

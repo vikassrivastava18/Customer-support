@@ -52,7 +52,7 @@ llm_with_tools = llm.bind_tools(tools)
 
 # Define the graph state
 class State(MessagesState):
-    book: int
+    book: str
 
 
 def similarity_search(query):
@@ -152,6 +152,6 @@ def build_graph():
         tools_condition,
     )
     builder.add_edge("tools", "assistant")
-    react_graph = builder.compile()
+    react_graph = builder.compile(checkpointer=checkpointer)
 
     return react_graph

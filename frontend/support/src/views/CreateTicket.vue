@@ -11,9 +11,9 @@
             <div class="mb-3">
                 <label for="bookSelect" class="form-label">Select Book</label>
 
-                <select class="form-select" id="bookSelect" v-model="form.book_id" required>
+                <select class="form-select" id="bookSelect" v-model="form.book_isbn" required>
                     <option disabled value="">Choose a book...</option>
-                    <option v-for="book in books" :key="book.id" :value="book.id">{{ book.title }}</option>
+                    <option v-for="book in books" :key="book.isbn" :value="book.isbn">{{ book.title }}</option>
                 </select>
             </div>
 
@@ -22,7 +22,7 @@
                 <label for="ticketTitle" class="form-label">Ticket Title</label>
 
                 <input type="text" class="form-control" id="ticketTitle" placeholder="Enter ticket title"
-                    v-model="form.title" required />
+                    v-model="form.query" required />
             </div>
 
             <!-- Description -->
@@ -69,9 +69,7 @@ onMounted(() => {
 async function getBooks() {
     const url = baseUrl + '/books'
     try {
-
         const res = await proxy.$axios.get(url)
-        console.log("Books data: ", res);
         books.value = res.data
 
     } catch (error) {
@@ -80,8 +78,8 @@ async function getBooks() {
 }
 
 const form = reactive({
-    book_id: '',
-    title: '',
+    book_isbn: '',
+    query: '',
     description: '',
     attachment: null
 })
@@ -93,10 +91,10 @@ const handleFileUpload = (event) => {
 const submitTicket = async () => {
     try {
         const url = baseUrl + "/create-ticket"
-        const formData = new FormData()
-        formData.append('book', form.book_id)
-        formData.append('query', form.title)
-        // formData.append('description', form.description)
+        let formData = new FormData()
+        formData.append('isbn', form.book_isbn)
+        formData.append('query', form.query)
+        
         isLoading.value = true
         const response = await proxy.$axios.post(
             url,
