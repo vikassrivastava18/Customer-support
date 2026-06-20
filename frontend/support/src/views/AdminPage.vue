@@ -12,7 +12,7 @@
                     <p><b>Query</b>: {{ ticket.query }}</p>
                     <p><b>Status</b>: {{ ticket.status_display }}</p>
                     <div class="mt-3">
-                        <textarea name="detailed-message" rows="4" cols="50" placeholder="Type response and press Enter"
+                        <textarea name="detailed-message" rows="10" cols="50" placeholder="Type response and press Enter"
                             class="form-control" v-model="ticket.response"></textarea>
                         <button class="btn btn-primary" @click="sendResponse(ticket)">Submit</button>
                     </div>
@@ -67,11 +67,7 @@ async function sendResponse(ticket) {
     }
     
     const url = baseUrl + `/staff/tickets/${ticket.id}`
-    console.log(ticket.id);
-    console.log(ticket.query);
-    console.log(ticket.response);
-    
-        
+       
     try {
         await proxy.$axios.put(url, {
             id: ticket.id,

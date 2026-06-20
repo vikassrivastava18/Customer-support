@@ -12,7 +12,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <label for="msg" class="p-2">Message</label>
-                <textarea placeholder="Type message.." name="msg" v-model="query" required></textarea>
+                <textarea placeholder="Type message.." name="msg" v-model="form.query" required></textarea>
 
                 <button type="submit" class="btn" @click="submitForm()" :disabled="disableChatBtn">Send</button>
                 <div class="container queryResults">
@@ -24,10 +24,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, getCurrentInstance, reactive } from 'vue'
 import { useStore } from 'vuex'
+import { baseUrl } from '../config'
 
 const store = useStore()
+const instance = getCurrentInstance()
+const proxy = instance && instance.proxy
+const form = reactive({
+    query: ''
+})
+
 const disableChatBtn = ref(false)
 const query = ref('')
 const isAuthenticated = computed(() => store.state.auth.isAuthenticated)
@@ -40,8 +47,33 @@ const closeForm = () => {
     document.getElementById("myForm").style.display = "none";
 }
 
-const submitForm = () => {
-    // submit logic here
+const submitForm = async () => {
+    disableChatBtn.value = true
+    const url = baseUrl + '/author-chat'
+    const formData = new FormData()
+    formData.append('query', form.query)
+    disableChatBtn.value = true
+
+    try {
+        const response = await proxy.$axios.post(
+            url,
+            formData
+        )
+        if (response.status === 200) {
+            const data = response.data
+            const resultText = data;
+            document.querySelector('.queryResults').innerHTML = `<p>Question: ${query.value}` + `<p>Answer: ${resultText}</p>` + document.querySelector('.queryResults').innerHTML;
+        }
+
+    } catch (error) {
+        store.dispatch('error/showError', {
+            title: 'Sorry, some error occured',
+            message: 'Sorry, some error occured'
+        })
+    } finally {
+        disableChatBtn.value = false
+    }
+
 }
 </script>
 
@@ -129,6 +161,6 @@ const submitForm = () => {
 #closeChatBtn {
     float: right;
     position: relative;
-    bottom: 15px;
+    bottom: 40px;
 }
 </style>

@@ -11,7 +11,7 @@
         <div class="d-flex flex-row flex-wrap mb-3">
             <div v-for="ticket in tickets" class="card mt-4 mx-4"
             :key="ticket.id" 
-            style="width: 18rem;">
+            style="max-height: 400px; overflow: auto; width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
@@ -25,14 +25,14 @@
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { baseUrl } from '@/config'
-import { onMounted, onUnmounted, getCurrentInstance, ref } from 'vue'
+import { onMounted, onUnmounted, getCurrentInstance, ref, ComponentInternalInstance } from 'vue'
 
-const instance = getCurrentInstance()
+const instance: ComponentInternalInstance | null = getCurrentInstance()
 const proxy = instance && instance.proxy
-const tickets = ref([])
-let ticketInterval = null
+const tickets = ref<any[]>([])
+let ticketInterval: NodeJS.Timeout | null = null
 
 onMounted(() => {
     getTickets()
@@ -45,13 +45,13 @@ onUnmounted(() => {
     }
 })
 
-async function getTickets() {
-    const url = baseUrl + '/tickets'
+async function getTickets(): Promise<void> {
+    const url: string = baseUrl + '/tickets'
     try {
         const res = await proxy.$axios.get(url)
         tickets.value = res.data
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error:', error.message)
     }
 }
