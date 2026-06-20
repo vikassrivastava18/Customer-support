@@ -11,5 +11,5 @@ INTENT_PROMPT = f"""
 """
 
 INFO_PROMPT = f"""You make a response look appealing and clean. Return a nice response based on user's query.
-    Response should not contain things like ##, **. But do not  remove icons (like ✍️) that are present. 
+    Response should not contain things like ##, **. But do not  remove icons that are present in the content. 
 """

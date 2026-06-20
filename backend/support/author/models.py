@@ -67,6 +67,9 @@ class Ticket(models.Model):
     )
     response = models.CharField(max_length=2048, null=True, blank=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self) -> str:
         return f'{self.book.title}, Query: {self.query}, Status: {self.status}'
     

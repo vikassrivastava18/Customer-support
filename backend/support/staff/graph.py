@@ -20,29 +20,29 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 
 # Define the tools
-def get_royality_earned(id):
+def get_royality_earned(isbn):
     """Get the royality earning for a book."""
-    book = Book.objects.get(id=id)
+    book = Book.objects.get(isbn=isbn)
     return book.royality_earned
 
-def get_royality_paid(id):
+def get_royality_paid(isbn):
     """Get the royality pending for a book.."""
-    book = Book.objects.get(id=id)
+    book = Book.objects.get(isbn=isbn)
     return book.royality_earned
 
-def get_royality_pending(id):
+def get_royality_pending(isbn):
     """Get the royality pending for a book."""
-    book = Book.objects.get(id=id)
+    book = Book.objects.get(isbn=isbn)
     return book.royality_pending
 
-def get_book_publish_status(id):
+def get_book_publish_status(isbn):
     """Get a book current live status
     """
     from datetime import date
-    print("ID: ", id)
-    book = Book.objects.get(id=id)
-    return f"Already published on {book.pub_date}" if book.pub_date < date.today() else (f"Not published yet, "
-                                                                                         f"publication date: {book.pub_date}")
+    book = Book.objects.get(isbn=isbn)
+    return f"Already published on {book.pub_date}" if book.pub_date < date.today() \
+        else (f"Not published yet, "
+              f"publication date: {book.pub_date}")
 
 
 tools = [get_royality_earned, get_royality_paid,
@@ -90,12 +90,11 @@ def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
 
 def assistant(state: State) -> State:
     # System message
+    book = state.get("book", None)
     sys_msg = SystemMessage(
-    content=f"You are a helpful assistant tasked with fetching relevant data for the user query. Book id: {state["book"]}")
+    content=f"You are a helpful assistant tasked with fetching relevant data for the user query. Book isbn: {book}")
 
     llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
-    book = Book.objects.get(id=state["book"])
-
     return {**state, "messages": [llm_response]}
 
 
@@ -107,7 +106,6 @@ def register_complaint(state: State) -> State:
 def get_info(state: State) -> State:
     query = state["messages"][0].content
     response = similarity_search(query)
-    book = Book.objects.get(id=state["book"])
     if response["distance"] >= 0.8:
         # Save a ticket for Human agent in database
         response = ""

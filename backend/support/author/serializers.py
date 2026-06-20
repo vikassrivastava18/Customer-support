@@ -23,6 +23,15 @@ class TicketListSerializer(serializers.ModelSerializer):
 
 
 class TicketCreateSerializer(serializers.ModelSerializer):
+    isbn = serializers.CharField(write_only=True)
+
     class Meta:
         model = Ticket
-        fields = ['query', 'book']
+        fields = ['query', 'isbn']
+
+    def validate_isbn(self, value):
+        try:
+            Book.objects.get(isbn=value)
+        except Book.DoesNotExist:
+            raise serializers.ValidationError("Invalid ISBN")
+        return value
