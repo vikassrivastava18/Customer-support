@@ -16,43 +16,46 @@
                             class="form-control" v-model="ticket.response"></textarea>
                         <button class="btn btn-primary" @click="sendResponse(ticket)">Submit</button>
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { baseUrl } from '@/config'
 import { onMounted, onUnmounted, getCurrentInstance, ref } from 'vue'
 
+interface Ticket {
+    id: number
+    book: string
+    query: string
+    status_display?: string
+    response?: string
+}
+
 const instance = getCurrentInstance()
-const proxy = instance && instance.proxy
-const tickets = ref([])
-let ticketInterval = null
+const proxy = (instance && instance.proxy) as any
+const tickets = ref<Ticket[]>([])
+let ticketInterval: number | null = null
 
 onMounted(() => {
     getTickets()
-    ticketInterval = setInterval(getTickets, 10000)
+    ticketInterval = window.setInterval(getTickets, 10000)
 })
 
 onUnmounted(() => {
-    if (ticketInterval) {
+    if (ticketInterval !== null) {
         clearInterval(ticketInterval)
     }
 })
 
-async function getTickets() {
+async function getTickets(): Promise<void> {
     const url = baseUrl + '/staff/tickets'
     try {
-
         const res = await proxy.$axios.get(url)
-        tickets.value = res.data.map(ticket => ({
-            ...ticket
-        }))
-
-    } catch (error) {
+        tickets.value = res.data.map((ticket: any) => ({ ...ticket }))
+    } catch (error: any) {
         console.error('Error:', error.message)
         proxy.$store.dispatch('error/showError', {
             title: 'Please login as staff.',
@@ -61,13 +64,10 @@ async function getTickets() {
     }
 }
 
-async function sendResponse(ticket) {
-    if (!ticket.response || !ticket.response.trim()) {
-        return
-    }
-    
+async function sendResponse(ticket: Ticket): Promise<void> {
+    if (!ticket.response || !ticket.response.trim()) return
+
     const url = baseUrl + `/staff/tickets/${ticket.id}`
-       
     try {
         await proxy.$axios.put(url, {
             id: ticket.id,
@@ -76,7 +76,7 @@ async function sendResponse(ticket) {
             status: 're'
         })
         ticket.response = ''
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error sending response:', error.message)
         proxy.$store.dispatch('error/showError', {
             title: 'Unable to send response',

@@ -16,30 +16,36 @@
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { baseUrl } from '@/config'
 import { onMounted, getCurrentInstance, ref } from 'vue'
 
-const instance = getCurrentInstance()
-const proxy = instance && instance.proxy
-const books = ref([])
+interface Book {
+    id: number | string
+    title?: string
+    isbn?: string
+    pub_date?: string
+    genre_display?: string
+    mrp?: number | string
+    [key: string]: any
+}
 
+const instance = getCurrentInstance()
+// proxy may be undefined in some contexts; type as any to access $axios
+const proxy: any = instance && (instance.proxy as any)
+const books = ref<Book[]>([])
 
 onMounted(() => {
     getBooks()
 })
 
-
-async function getBooks() {
+async function getBooks(): Promise<void> {
     const url = baseUrl + '/books'
     try {
-
         const res = await proxy.$axios.get(url)
-        console.log("Books data: ", res);
-        books.value = res.data
-
-    } catch (error) {
-        console.error('Error:', error.message)
+        books.value = res.data as Book[]
+    } catch (error: unknown) {
+        console.error('Error:', (error as Error).message)
     }
 }
 </script>

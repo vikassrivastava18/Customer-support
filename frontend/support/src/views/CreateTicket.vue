@@ -50,16 +50,27 @@
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import LoaderComponent from '@/components/LoaderComponent.vue'
 import { baseUrl } from '@/config'
-import { getCurrentInstance } from 'vue'
-import { reactive, ref, onMounted } from 'vue'
+import { getCurrentInstance, reactive, ref, onMounted } from 'vue'
+
+interface Book {
+    isbn: string
+    title: string
+}
+
+interface TicketForm {
+    book_isbn: string
+    query: string
+    description: string
+    attachment: File | null
+}
 
 const instance = getCurrentInstance()
-const proxy = instance && instance.proxy
+const proxy = instance?.proxy as any
 
-const books = ref([])
+const books = ref<Book[]>([])
 const isLoading = ref(false)
 
 onMounted(() => {
@@ -67,49 +78,52 @@ onMounted(() => {
 })
 
 async function getBooks() {
-    const url = baseUrl + '/books'
+    const url = `${baseUrl}/books`
     try {
-        const res = await proxy.$axios.get(url)
+        const res = await proxy.$axios.get<Book[]>(url)
         books.value = res.data
 
-    } catch (error) {
-        console.error('Error:', error.message)
+    } catch (error: unknown) {
+        console.error('Error:', error instanceof Error ? error.message : String(error))
     }
 }
 
-const form = reactive({
+const form = reactive<TicketForm>({
     book_isbn: '',
     query: '',
     description: '',
     attachment: null
 })
 
-const handleFileUpload = (event) => {
-    form.attachment = event.target.files[0]
+const handleFileUpload = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    form.attachment = target.files?.[0] ?? null
 }
 
 const submitTicket = async () => {
     try {
-        const url = baseUrl + "/create-ticket"
-        let formData = new FormData()
+        const url = `${baseUrl}/create-ticket`
+        const formData = new FormData()
         formData.append('isbn', form.book_isbn)
         formData.append('query', form.query)
-        
+        formData.append('description', form.description)
+
+        if (form.attachment) {
+            formData.append('attachment', form.attachment)
+        }
+
         isLoading.value = true
-        const response = await proxy.$axios.post(
-            url,
-            formData
-        )
+        await proxy.$axios.post(url, formData)
         proxy.$router.push('/tickets')
         proxy.$store.dispatch('success/showSucsess', {
             title: 'Ticket Created',
             message: 'Item updated successfully.'
         })
-        
-    } catch (error) {
-        console.error('Error creating ticket:', error)
+
+    } catch (error: unknown) {
+        console.error('Error creating ticket:', error instanceof Error ? error.message : String(error))
     } finally {
-        isLoading.value = false;
+        isLoading.value = false
     }
 }
 </script>

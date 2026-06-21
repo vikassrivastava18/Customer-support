@@ -9,9 +9,7 @@
 
         </h4>
         <div class="d-flex flex-row flex-wrap mb-3">
-            <div v-for="ticket in tickets" class="card mt-4 mx-4"
-            :key="ticket.id" 
-            style="max-height: 400px; overflow: auto; width: 18rem;">
+            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
@@ -26,35 +24,56 @@
 </template>
 
 <script setup lang="ts">
-import { baseUrl } from '@/config'
-import { onMounted, onUnmounted, getCurrentInstance, ref, ComponentInternalInstance } from 'vue'
+    import { baseUrl } from '@/config'
+    import { onMounted, onUnmounted, getCurrentInstance, ref } from 'vue'
 
-const instance: ComponentInternalInstance | null = getCurrentInstance()
-const proxy = instance && instance.proxy
-const tickets = ref<any[]>([])
-let ticketInterval: NodeJS.Timeout | null = null
-
-onMounted(() => {
-    getTickets()
-    ticketInterval = setInterval(getTickets, 10000)
-})
-
-onUnmounted(() => {
-    if (ticketInterval) {
-        clearInterval(ticketInterval)
+    interface Ticket {
+        id: number | string
+        book: string
+        query: string
+        status_display: string
+        response?: string
     }
-})
 
-async function getTickets(): Promise<void> {
-    const url: string = baseUrl + '/tickets'
-    try {
-        const res = await proxy.$axios.get(url)
-        tickets.value = res.data
+    const instance = getCurrentInstance()
+    const proxy = instance?.proxy as {
+        $axios: {
+            get: <T = any>(url: string) => Promise<{ data: T }>
+        }
+    } | undefined
 
-    } catch (error: any) {
-        console.error('Error:', error.message)
+    const tickets = ref<Ticket[]>([])
+    let ticketInterval: ReturnType<typeof setInterval> | null = null
+
+    onMounted(() => {
+        getTickets()
+        ticketInterval = setInterval(getTickets, 10000)
+    })
+
+    onUnmounted(() => {
+        if (ticketInterval !== null) {
+            clearInterval(ticketInterval)
+            ticketInterval = null
+        }
+    })
+
+    async function getTickets() {
+        const url = `${baseUrl}/tickets`
+        try {
+            if (!proxy) {
+                throw new Error('Axios instance not available')
+            }
+            const res = await proxy.$axios.get<Ticket[]>(url)
+            console.log('Tickets data: ', res)
+            tickets.value = res.data
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error('Error:', error.message)
+            } else {
+                console.error('Error:', error)
+            }
+        }
     }
-}
 </script>
 
 <style>

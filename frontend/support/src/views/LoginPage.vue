@@ -20,50 +20,51 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { baseUrl } from '@/config';
 import { ref } from 'vue'
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
+interface LoginForm {
+    username: string;
+    password: string;
+}
+
 const store = useStore();
 const router = useRouter();
 
-const formData = ref({
-    username: null,
-    password: null
+const formData = ref<LoginForm>({
+    username: '',
+    password: ''
 });
 
-const submit = async () => {            
-    const url = baseUrl + '/login'
-    const requestFormData = new FormData()
-    requestFormData.append('username', formData.value.username)
-    requestFormData.append('password', formData.value.password)
+const submit = async (): Promise<void> => {            
+    const url = `${baseUrl}/login`;
+    const requestFormData = new FormData();
+    requestFormData.append('username', formData.value.username);
+    requestFormData.append('password', formData.value.password);
 
     try {
-        const res = await axios.post(url, requestFormData)
+        const res = await axios.post<{ token: string }>(url, requestFormData);
         if (res.status === 200) {
-            const data = res.data
-            // Set the token in local storage
-            localStorage.setItem('Authentication-Token', data.token)
-            // Set the state of isAuthenticated to true
-            store.dispatch('auth/login')
-            // Redirect to the home page
-            router.push({ path: '/' })
-            // handle success (e.g., show a success message, redirect, etc.)
+            const data = res.data;
+            localStorage.setItem('Authentication-Token', data.token);
+            await store.dispatch('auth/login');
+            await router.push({ path: '/' });
         }
-    } catch (error) {
-        if (error.response && (error.response.status === 401 || error.response.status === 400)) {
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response && (error.response.status === 401 || error.response.status === 400)) {
             store.dispatch('error/showError', {
                 title: 'Login Failed',
                 message: 'Invalid username or password'
-            })
+            });
         } else {
             store.dispatch('error/showError', {
                 title: 'Something went wrong',
                 message: 'Please try again later.'
-            })
+            });
         }
     }
 }

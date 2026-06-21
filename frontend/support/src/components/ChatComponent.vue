@@ -23,58 +23,73 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, getCurrentInstance, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { baseUrl } from '../config'
 
+interface ChatForm {
+  query: string
+}
+
+interface AxiosProxy {
+  $axios?: {
+    post: (url: string, data: FormData) => Promise<{ status: number; data: unknown }>
+  }
+}
+
 const store = useStore()
 const instance = getCurrentInstance()
-const proxy = instance && instance.proxy
-const form = reactive({
-    query: ''
+const proxy = instance?.proxy as AxiosProxy | undefined
+const form = reactive<ChatForm>({
+  query: ''
 })
 
 const disableChatBtn = ref(false)
-const query = ref('')
-const isAuthenticated = computed(() => store.state.auth.isAuthenticated)
+const isAuthenticated = computed<boolean>(() => Boolean(store.state.auth?.isAuthenticated))
 
-const openForm = () => {
-    document.getElementById("myForm").style.display = "block";
+const openForm = (): void => {
+  const chatForm = document.getElementById('myForm')
+  if (chatForm) {
+    chatForm.style.display = 'block'
+  }
 }
 
-const closeForm = () => {
-    document.getElementById("myForm").style.display = "none";
+const closeForm = (): void => {
+  const chatForm = document.getElementById('myForm')
+  if (chatForm) {
+    chatForm.style.display = 'none'
+  }
 }
 
-const submitForm = async () => {
-    disableChatBtn.value = true
-    const url = baseUrl + '/author-chat'
-    const formData = new FormData()
-    formData.append('query', form.query)
-    disableChatBtn.value = true
+const submitForm = async (): Promise<void> => {
+  disableChatBtn.value = true
+  const url = `${baseUrl}/author-chat`
+  const formData = new FormData()
+  formData.append('query', form.query)
 
-    try {
-        const response = await proxy.$axios.post(
-            url,
-            formData
-        )
-        if (response.status === 200) {
-            const data = response.data
-            const resultText = data;
-            document.querySelector('.queryResults').innerHTML = `<p>Answer: ${resultText}</p>` + document.querySelector('.queryResults').innerHTML;
-        }
-
-    } catch (error) {
-        store.dispatch('error/showError', {
-            title: 'Sorry, some error occured',
-            message: 'Sorry, some error occured'
-        })
-    } finally {
-        disableChatBtn.value = false
-        form.query = ""
+  try {
+    if (!proxy?.$axios) {
+      throw new Error('Axios instance not available')
     }
+    const response = await proxy.$axios.post(url, formData)
 
+    if (response.status === 200) {
+      const resultText = response.data
+      const resultsContainer = document.querySelector('.queryResults')
+      if (resultsContainer instanceof HTMLElement) {
+        resultsContainer.innerHTML = `<p>Answer: ${resultText}</p>` + resultsContainer.innerHTML
+      }
+    }
+  } catch (error) {
+    store.dispatch('error/showError', {
+      title: 'Sorry, some error occured',
+      message: 'Sorry, some error occured'
+    })
+  } finally {
+    disableChatBtn.value = false
+    form.query = ''
+  }
 }
 </script>
 
