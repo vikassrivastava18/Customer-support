@@ -71,7 +71,6 @@ class TicketCreateView(generics.CreateAPIView):
             book=book,
             response=response_text,
         )
-
         return Response(
             {
                 "id": ticket.id,
