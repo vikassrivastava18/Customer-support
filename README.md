@@ -1,6 +1,10 @@
 # Customer Support
 
-This repository contains the "customer-support" application — an assignment project for BookLeaf. The app is a simple, practical example of a customer support system that demonstrates best practices for building, running, and testing a small web service.
+This repository contains the "customer-support" application. The app allows authors to chat and get answer to their queries using RAG, langChain. Also an agent based ticket resolution is implemented using LangGraph. 
+
+## LangGraph Workflow Diagram
+<img src="assets/support_graph.png" alt="LangGraph workflowdiagram" width="500"/>
+
 
 ## Table of Contents
 - About
