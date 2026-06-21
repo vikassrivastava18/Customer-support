@@ -7,6 +7,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.messages import SystemMessage, AIMessage
+from django.contrib.auth.models import User
 
 from .prompt import INTENT_PROMPT, INFO_PROMPT
 from .schemas import IntentSchema
@@ -53,6 +54,7 @@ llm_with_tools = llm.bind_tools(tools)
 # Define the graph state
 class State(MessagesState):
     book: str
+    username: str
 
 
 def similarity_search(query):
@@ -108,17 +110,22 @@ def get_info(state: State) -> State:
     response = similarity_search(query)
     if response["distance"] >= 0.8:
         # Save a ticket for Human agent in database
-        response = ""
+        username = state["username"]
+        user = User.objects.get(username=username)
+        ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
+        response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
     else:
         response = response["context"]
 
-    prompt = INFO_PROMPT
+        prompt = INFO_PROMPT
 
-    prompt += f"""/n Query: {query}. Resonse: {response}"""
-    llm_response = llm.invoke(prompt)
+        prompt += f"""/n Query: {query}. 
+                   Context: {response}. 
+                   Answer strictly based on the context."""
+        response = llm.invoke(prompt).content
     return {
         **state,
-        "messages": [AIMessage(content=llm_response.content)]
+        "messages": [AIMessage(content=response)]
     }
 
 

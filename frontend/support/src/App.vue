@@ -11,19 +11,15 @@
   
   <ChatComponent />
 
-
   </main>
 
-  
 </template>
 
 <script setup>
-
 import ChatComponent from './components/ChatComponent.vue';
 import ErrorComponent from './components/ErrorComponent.vue';
 import HeaderComponent from './components/HeaderComponent.vue'
 import SuccessComponent from './components/SuccessComponent.vue'
-
 
 </script>
 

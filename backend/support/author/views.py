@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import (SessionAuthentication,
                                            TokenAuthentication)
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from langchain_core.messages import HumanMessage
@@ -32,7 +33,8 @@ class TicketListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Ticket.objects.filter(
-            book__author=self.request.user
+            Q(book__author=self.request.user) |
+            Q(user=self.request.user)
         )
 
 
@@ -48,14 +50,19 @@ class TicketCreateView(generics.CreateAPIView):
 
         isbn = serializer.validated_data["isbn"]
         query = serializer.validated_data["query"]
-
         book = get_object_or_404(Book, isbn=isbn)
 
         graph = build_graph()
+        session_id = request.user.username
+        config = {
+            "configurable": {
+                "thread_id": session_id
+            }
+        }
         result = graph.invoke({
             "book": isbn,
             "messages": [HumanMessage(content=query)],
-        })
+        }, config=config)
 
         response_text = result["messages"][-1].content
 
@@ -87,12 +94,11 @@ class ChatView(APIView):
                 "thread_id": session_id
             }
         }
-        print("config: ", config)
         graph = build_graph()
         result = graph.invoke({
             "messages": [HumanMessage(content=query)],
+            "username": session_id
         }, config=config)
-        print("Messages: ", result["messages"])
         response = result["messages"][-1].content
 
         return Response(response, status=status.HTTP_200_OK)

@@ -41,7 +41,6 @@ class Book(models.Model):
     royality_paid = models.IntegerField(default=0)
     royality_pending = models.IntegerField(default=0)
 
-
     def __str__(self) -> str:
         return f'{self.title} - {self.status}'
     
@@ -59,7 +58,8 @@ class Ticket(models.Model):
     Progress, Resolved, Closed), the original query, and any responses from the admin team.   
     """
     query = models.CharField(max_length=512)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(
         max_length=2,
         choices=TicketStatus.choices,
