@@ -1,12 +1,12 @@
 # Customer Support
 
+<img src="assets/screenshot.png" alt="Home Page" width="600"/>
+
 Get quick support for authors published books, submit service requests, and explore frequently asked questions about the publishing process, royalties, etc.
 Instant agentic chat to anwer all your queries
 
-<img src="assets/support_graph.png" alt="LangGraph workflowdiagram" width="500"/>
-
 ## LangGraph Workflow Diagram
-<img src="assets/screenshot.png" alt="Home Page" width="500"/>
+<img src="assets/support_graph.png" alt="LangGraph workflowdiagram" width="500"/>
 
 
 ## Table of Contents
