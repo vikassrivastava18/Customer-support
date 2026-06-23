@@ -2,34 +2,23 @@
 
 <img src="assets/screenshot.png" alt="Home Page" width="600"/>
 
-Get quick support for authors published books, submit service requests, and explore frequently asked questions about the publishing process, royalties, etc.
-Instant agentic chat to anwer all your queries
+Application is built using FastAPI, Vue, LangGraph to help automate authors query resolution.
+
 
 ## LangGraph Workflow Diagram
 <img src="assets/support_graph.png" alt="LangGraph workflowdiagram" width="500"/>
 
 
-## Table of Contents
-- About
-- Key Features
-- Tech Stack
-- Installation
-- ERD
-- Configuration
-- Author Login
-- Staff Login
-
-
 ## About
+Authors get quick support on published books, submit requests/complaints, and explore frequently asked questions about the publishing process, royalties, etc.
+Instant agentic chat to anwer all your queries. A RAG and agentic AI implementation to help resolve tickets/queries
 
-The Customer Support application provides a foundation for handling user inquiries, tracking tickets, etc. It is intended as a learning and evaluation project for BookLeaf.
 
 ## Key Features
 
-- Create, read, update, and close support tickets
-- Simple REST API for integration and testing
-- Basic data validation and error handling
-- Clear project structure for easy extensibility
+- Authors can login and ask queries regarding their books or other FAQ like royalties, publishing timelines, etc
+- Chat functionality to help resolve author's queries through RAG. Admin can intervene and answer complex queries.
+- Ticket creation and real time resolution using lon polling and webhook.
 
 ## Tech Stack
 
