@@ -5,17 +5,19 @@
 
                 <!-- Image Column -->
                 <div class="col-lg-6">
-                    <img src="../assets/publishing.png"
-                        alt="BookLane Publishing image" class="rounded-4 shadow-lg w-90 object-fit-cover mt-2" />
+                    <img src="../assets/pub_new.jpg"
+                        width="550"
+                        alt="BookLane Publishing image" 
+                        class="rounded-4 shadow-lg w-90 object-fit-cover mt-5" />
                 </div>
 
                 <!-- Content Column -->
                 <div class="col-lg-6">
 
                     <!-- Main Heading -->
-                    <h2 class="display-5 fw-bold text-dark mt-2 mb-4">
+                    <h4 class="display-5 fw-bold text-dark mt-2 mb-4">
                         BookLane Support
-                    </h2>
+                    </h4>
 
                     <!-- Paragraph -->        
 

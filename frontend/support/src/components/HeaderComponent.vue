@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between p-2" style="border: 1px solid black;
         background-color: #404040;">
          <router-link to="/" class="nav-link text_white">
-            <h3>BookLane Publishing</h3>
+            <h3>BookLane</h3>
          </router-link>        
 
         <div>

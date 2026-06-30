@@ -65,7 +65,7 @@ def similarity_search(query):
     vector_store = FAISS.from_documents(chunks, embeddings)
 
     # perform similarity search with score
-    results = vector_store.similarity_search_with_score(query, k=1)
+    results = vector_store.similarity_search_with_score(query, k=5)
 
     # unpack result
     doc, dist = results[0]
@@ -84,9 +84,11 @@ def start_graph(state: State) -> State:
 
 def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
     prompt = INTENT_PROMPT
-    prompt += f"""/n Query: {state["messages"][0].content}"""
+    prompt += f"""/n Query: {state["messages"][-1].content}"""
+    print("Prompt: ", prompt)
     structured_llm = llm.with_structured_output(IntentSchema)
     response = structured_llm.invoke(prompt)
+    print("User intent: ", response.intent)
     return response.intent
 
 
@@ -108,21 +110,21 @@ def register_complaint(state: State) -> State:
 def get_info(state: State) -> State:
     query = state["messages"][0].content
     response = similarity_search(query)
-    if response["distance"] >= 0.8:
-        # Save a ticket for Human agent in database
-        username = state["username"]
-        user = User.objects.get(username=username)
-        ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
-        response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
-    else:
-        response = response["context"]
+    # if response["distance"] >= 0.7:
+    #     # Save a ticket for Human agent in database
+    #     username = state["username"]
+    #     user = User.objects.get(username=username)
+    #     ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
+    #     response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
+    # else:
+    response = response["context"]
 
-        prompt = INFO_PROMPT
+    prompt = INFO_PROMPT
 
-        prompt += f"""/n Query: {query}. 
-                   Context: {response}. 
-                   Answer strictly based on the context."""
-        response = llm.invoke(prompt).content
+    prompt += f"""/n Query: {query}. 
+               Context: {response}. 
+               Answer strictly based on the context."""
+    response = llm.invoke(prompt).content
     return {
         **state,
         "messages": [AIMessage(content=response)]
