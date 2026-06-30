@@ -108,16 +108,16 @@ def register_complaint(state: State) -> State:
 
 
 def get_info(state: State) -> State:
-    query = state["messages"][0].content
+    query = state["messages"][-1].content
     response = similarity_search(query)
-    # if response["distance"] >= 0.7:
-    #     # Save a ticket for Human agent in database
-    #     username = state["username"]
-    #     user = User.objects.get(username=username)
-    #     ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
-    #     response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
-    # else:
-    response = response["context"]
+    if response["distance"] >= 0.7:
+        # Save a ticket for Human agent in database
+        username = state["username"]
+        user = User.objects.get(username=username)
+        ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
+        response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
+    else:
+        response = response["context"]
 
     prompt = INFO_PROMPT
 
