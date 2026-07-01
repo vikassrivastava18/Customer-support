@@ -44,6 +44,17 @@ Instant agentic chat to anwer all your queries. A RAG and agentic AI implementat
                               
 ```
 
+## Configuration
+
+- Ensure required environment variables are set in the backend -> support directory before running the app.
+```POSTGRES_DB=support
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=hello2020
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+SECRET_KEY=django-insecure-rb8qsms&__!2x%xq
+OPENAI_API_KEY="Your OpenAI key"
+```
 
 ## Installation
 
@@ -51,10 +62,7 @@ docker compose up --build -d
 
 Update these steps to match the project's actual dependency manager and commands.
 
-## Configuration
 
-- Copy any example environment file if available (e.g., .env.example -> .env).
-- Ensure required environment variables are set before running the app.
 
 ## Author Login
 Login with author username by combining first as last name with _
