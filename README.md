@@ -1,6 +1,6 @@
 # Customer Support
 
-<img src="assets/screenshot.png" alt="Home Page" width="600"/>
+## An author's ticket resolution and agentic chat app.
 
 Application is built using FastAPI, Vue, LangGraph to help automate authors query resolution.
 
