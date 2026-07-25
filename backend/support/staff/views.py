@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 from author.models import Book, Ticket
 from .serializers import (TicketListSerializer,
                           TicketUpdateSerializer)
-
 # Create your views here.
 
 class TicketListView(generics.ListAPIView):
@@ -66,7 +65,6 @@ class AddJsonDataView(APIView):
                 "message": "JSON file loaded successfully",
                 "data": data
             }
-
             return Response(response_data, status=status.HTTP_200_OK)
 
         except FileNotFoundError:
@@ -74,13 +72,11 @@ class AddJsonDataView(APIView):
                 {"error": "data.json file not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-
         except json.JSONDecodeError:
             return Response(
                 {"error": "Invalid JSON format"},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
         except Exception as e:
             return Response(
                 {"error": str(e)},

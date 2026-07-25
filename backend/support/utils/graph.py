@@ -1,18 +1,18 @@
 from typing import Literal
-
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from langgraph.graph import StateGraph, MessagesState, END
+
+from langgraph.graph import StateGraph, MessagesState
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import (OpenAIEmbeddings,
+                              ChatOpenAI)
 from langchain_core.messages import SystemMessage, AIMessage
 from django.contrib.auth.models import User
 
-from .prompt import INTENT_PROMPT, INFO_PROMPT
-from .schemas import IntentSchema
+from staff.schemas import IntentSchema
 from author.models import Ticket, Book
-from .knowledge import documents
+from utils.knowledge import documents
+from utils.prompt import INTENT_PROMPT, INFO_PROMPT
 
 load_dotenv()
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
@@ -21,35 +21,44 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 
 # Define the tools
-def get_royality_earned(isbn):
-    """Get the royality earning for a book."""
-    book = Book.objects.get(isbn=isbn)
-    return book.royality_earned
+class Tools:
 
-def get_royality_paid(isbn):
-    """Get the royality pending for a book.."""
-    book = Book.objects.get(isbn=isbn)
-    return book.royality_earned
+    @staticmethod
+    def get_royality_earned(isbn):
+        """Get the royality earning for a book."""
+        book = Book.objects.get(isbn=isbn)
+        return book.royality_earned
 
-def get_royality_pending(isbn):
-    """Get the royality pending for a book."""
-    book = Book.objects.get(isbn=isbn)
-    return book.royality_pending
+    @staticmethod
+    def get_royality_paid(isbn):
+        """Get the royality pending for a book.."""
+        book = Book.objects.get(isbn=isbn)
+        return book.royality_earned
 
-def get_book_publish_status(isbn):
-    """Get a book current live status
-    """
-    from datetime import date
-    book = Book.objects.get(isbn=isbn)
-    return f"Already published on {book.pub_date}" if book.pub_date < date.today() \
-        else (f"Not published yet, "
-              f"publication date: {book.pub_date}")
+    @staticmethod
+    def get_royality_pending(isbn):
+        """Get the royality pending for a book."""
+        book = Book.objects.get(isbn=isbn)
+        return book.royality_pending
 
+    @staticmethod
+    def get_book_publish_status(isbn):
+        """Get a book current live status
+        """
+        from datetime import date
+        book = Book.objects.get(isbn=isbn)
+        return f"Already published on {book.pub_date}" if book.pub_date < date.today() \
+            else (f"Not published yet, "
+                  f"publication date: {book.pub_date}")
 
-tools = [get_royality_earned, get_royality_paid,
-         get_royality_pending, get_book_publish_status]
+    @staticmethod
+    def get_tools():
+        tools = [Tools.get_royality_earned, Tools.get_royality_paid,
+                 Tools.get_royality_pending, Tools.get_book_publish_status]
+        return tools
+
 # Bind the tools
-llm_with_tools = llm.bind_tools(tools)
+llm_with_tools = llm.bind_tools(Tools.get_tools())
 
 # Define the graph state
 class State(MessagesState):
@@ -85,10 +94,8 @@ def start_graph(state: State) -> State:
 def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
     prompt = INTENT_PROMPT
     prompt += f"""/n Query: {state["messages"][-1].content}"""
-    print("Prompt: ", prompt)
     structured_llm = llm.with_structured_output(IntentSchema)
     response = structured_llm.invoke(prompt)
-    print("User intent: ", response.intent)
     return response.intent
 
 
@@ -139,7 +146,6 @@ def build_graph():
 
     builder.add_node("start_graph", start_graph)
     builder.add_node("get_info", get_info)
-
     builder.add_node("assistant", assistant)
     builder.add_node("register_complaint", register_complaint)
     builder.add_node("tools", ToolNode(tools))

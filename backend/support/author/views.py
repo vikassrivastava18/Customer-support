@@ -12,7 +12,7 @@ from .serializers import (BookSerializer,
                           TicketListSerializer,
                           TicketCreateSerializer)
 from .models import Book, Ticket
-from staff.graph import build_graph
+from utils.graph import build_graph
 # Create your views here.
 
 
