@@ -12,7 +12,7 @@ from .serializers import (BookSerializer,
                           TicketListSerializer,
                           TicketCreateSerializer)
 from .models import Book, Ticket
-from utils.graph import build_graph
+from utils.graph import Graph
 # Create your views here.
 
 
@@ -52,7 +52,7 @@ class TicketCreateView(generics.CreateAPIView):
         query = serializer.validated_data["query"]
         book = get_object_or_404(Book, isbn=isbn)
 
-        graph = build_graph()
+        graph = Graph.build_graph()
         session_id = request.user.username
         config = {
             "configurable": {
@@ -93,7 +93,7 @@ class ChatView(APIView):
                 "thread_id": session_id
             }
         }
-        graph = build_graph()
+        graph = Graph.build_graph()
         result = graph.invoke({
             "messages": [HumanMessage(content=query)],
             "username": session_id
