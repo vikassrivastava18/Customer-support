@@ -12,25 +12,14 @@
                 </div>
 
                 <!-- Content Column -->
-                <div class="col-lg-6">
-
-                    <!-- Main Heading -->
-                    <h4 class="display-5 fw-bold text-dark mt-2 mb-4">
-                        BookLane Support
-                    </h4>
+                <div class="col-lg-6">        
 
                     <!-- Paragraph -->        
-
-                    <p class="text-secondary fs-5 lh-lg mb-5">
-                        Welcome, Authors! Get quick support for your published books, submit service requests, 
+                    <p class="text-secondary fs-5 lh-lg mb-5 mt-5">
+                        Welcome, Authors! <br>Get quick support for your published books, submit service requests, 
                         and explore frequently asked questions about the publishing process, royalties, etc.
                     </p>
-
-                    <p class="text-secondary fs-5 lh-lg mb-4">
-                        Founded in New Delhi in 2000, our publishing company is dedicated to helping authors, educators, and organizations 
-                        bring their ideas to life through high-quality publishing services. .
-                    </p>
-
+                    
                 </div>
             </div>
         </div>

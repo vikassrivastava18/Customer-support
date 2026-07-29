@@ -98,7 +98,7 @@ const submitForm = async (): Promise<void> => {
 .open-button {
     padding: 10px 40px;
     background-color: rgb(64, 64, 64);
-    color: rgb(231, 152, 168);
+    color: #fff;
     font-size: 17px;
     max-width: 300px;
     border-radius: 20px;
