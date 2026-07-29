@@ -45,13 +45,19 @@ class Graph:
 
     @staticmethod
     def assistant(state: State) -> State:
-        # System message
-        book = state.get("book", None)
-        sys_msg = SystemMessage(
-        content=f"You are a helpful assistant tasked with fetching relevant data for the user query. Book isbn: {book}")
+        try:
+            # System message
+            book = state.get("book", None)
+            sys_msg = SystemMessage(
+            content=f"You are a helpful assistant tasked with fetching relevant data for the user query. Book isbn: {book}")
 
-        llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
-        return {**state, "messages": [llm_response]}
+            llm_response = llm_with_tools.invoke([sys_msg] + state["messages"])
+            return {**state, "messages": [llm_response]}
+        except Exception as e:
+            print(f"Error in tool call {e}")
+            llm_response = AIMessage(content=f"Error in tool call {e}")
+            return {**state, "messages": [llm_response]}
+
 
     @staticmethod
     def register_complaint(state: State) -> State:
@@ -75,7 +81,6 @@ class Graph:
             }
         else:
             response = response["context"]
-
         prompt = INFO_PROMPT
 
         prompt += f"""/n Query: {query}. 
