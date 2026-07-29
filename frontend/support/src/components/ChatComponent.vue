@@ -95,7 +95,7 @@ const submitForm = async (): Promise<void> => {
     })
   } finally {
     disableChatBtn.value = false
-    form.query = ''
+    // form.query = ''
   }
 }
 </script>

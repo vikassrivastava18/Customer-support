@@ -14,11 +14,14 @@ from utils.prompt import INTENT_PROMPT, INFO_PROMPT
 from utils.tools import Tools
 
 load_dotenv()
-llm = ChatOpenAI(model="gpt-4.1-nano", temperature=0)
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+llm2 = ChatOpenAI(model="gpt-4.1-nano", temperature=0)
 checkpointer = InMemorySaver()
 
 # Bind the tools
 llm_with_tools = llm.bind_tools(Tools.get_tools())
+llm2_with_tools = llm2.bind_tools(Tools.get_tools())
 
 # Define the graph state
 class State(MessagesState):
@@ -36,7 +39,7 @@ class Graph:
     def get_user_intent(state: State) -> Literal["info", "query", "complaint"]:
         prompt = INTENT_PROMPT
         prompt += f"""/n Query: {state["messages"][-1].content}"""
-        structured_llm = llm.with_structured_output(IntentSchema)
+        structured_llm = llm2.with_structured_output(IntentSchema)
         response = structured_llm.invoke(prompt)
         return response.intent
 
@@ -60,8 +63,6 @@ class Graph:
         query = state["messages"][-1].content
         response = similarity_search(query)
         if response["distance"] >= 0.7:
-            print("No relevant document found")
-
             # Save a ticket for Human agent in database
             username = state["username"]
             user = User.objects.get(username=username)
