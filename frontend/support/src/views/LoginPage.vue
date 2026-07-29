@@ -52,10 +52,9 @@ const submit = async (): Promise<void> => {
     requestFormData.append('password', formData.value.password);
 
     try {
-        const res = await axios.post<{ token: string }>(url, requestFormData);
+        const res = await axios.post<TokenData>(url, requestFormData);
         if (res.status === 200) {
             const data = res.data;
-            console.log("Data: ", data);            
             localStorage.setItem('Authentication-Token', data.token);
             localStorage.setItem('Username', data.username)
             await store.dispatch('auth/login');
