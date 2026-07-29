@@ -8,7 +8,7 @@ const routes = [
     { path: '/books', component: () => import('./views/BookPage.vue')},
     { path: '/tickets', component: () => import('./views/TicketsPage.vue'), meta: { requiresAuth: true }},
     { path: '/create-ticket', component: () => import('./views/CreateTicket.vue'), meta: { requiresAuth: true }},
-    { path: '/staff', component: () => import('./views/AdminPage.vue'), meta: { requiresAuth: true }},
+    { path: '/admin', component: () => import('./views/AdminPage.vue'), meta: { requiresAuth: true }},
 ]
 
 const router = createRouter({

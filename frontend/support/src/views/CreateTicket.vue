@@ -5,7 +5,7 @@
         <div v-if="isLoading">
             <LoaderComponent />
         </div>
-        <form v-else class="p-4" @submit.prevent="submitTicket">
+        <form v-else class="p-4 mt-3" @submit.prevent="submitTicket">
 
             <!-- Book Select -->
             <div class="mb-3">
@@ -127,3 +127,9 @@ const submitTicket = async () => {
     }
 }
 </script>
+
+<style>
+form {
+        border: 1px solid;
+    }
+</style>

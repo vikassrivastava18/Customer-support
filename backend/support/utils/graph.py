@@ -14,9 +14,8 @@ from utils.prompt import INTENT_PROMPT, INFO_PROMPT
 from utils.tools import Tools
 
 load_dotenv()
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+llm = ChatOpenAI(model="gpt-4.1-nano", temperature=0)
 checkpointer = InMemorySaver()
-
 
 # Bind the tools
 llm_with_tools = llm.bind_tools(Tools.get_tools())
@@ -28,7 +27,6 @@ class State(MessagesState):
 
 
 class Graph:
-
     # Define Nodes
     @staticmethod
     def start_graph(state: State) -> State:
@@ -62,11 +60,18 @@ class Graph:
         query = state["messages"][-1].content
         response = similarity_search(query)
         if response["distance"] >= 0.7:
+            print("No relevant document found")
+
             # Save a ticket for Human agent in database
             username = state["username"]
             user = User.objects.get(username=username)
             ticket = Ticket.objects.create(query=query, user=user, response=response["context"])
-            response = f"Ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time."
+            response = (f"Could not find a suitable answer."
+                        f"A ticket has been generated with ID: {ticket.id}. Please check your tickets page in some time.")
+            return {
+                **state,
+                "messages": [AIMessage(content=response)]
+            }
         else:
             response = response["context"]
 

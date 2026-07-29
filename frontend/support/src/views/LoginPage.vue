@@ -32,6 +32,11 @@ interface LoginForm {
     password: string;
 }
 
+interface TokenData {
+    username: string
+    token: string
+}
+
 const store = useStore();
 const router = useRouter();
 
@@ -50,7 +55,9 @@ const submit = async (): Promise<void> => {
         const res = await axios.post<{ token: string }>(url, requestFormData);
         if (res.status === 200) {
             const data = res.data;
+            console.log("Data: ", data);            
             localStorage.setItem('Authentication-Token', data.token);
+            localStorage.setItem('Username', data.username)
             await store.dispatch('auth/login');
             await router.push({ path: '/' });
         }
@@ -81,7 +88,7 @@ const submit = async (): Promise<void> => {
     form {
         width: 100%;
         border-radius: 10px;
-        border: 2px solid;
+        border: 1px solid;
         border-radius: 5px;
     }
     h2 {

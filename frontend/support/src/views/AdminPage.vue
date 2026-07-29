@@ -8,13 +8,18 @@
         <div class="d-flex flex-row flex-wrap mb-3">
             <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
-                    <p><b>Query</b>: {{ ticket.query }}</p>
-                    <p><b>Status</b>: {{ ticket.status_display }}</p>
                     <div class="mt-3">
-                        <textarea name="detailed-message" rows="10" cols="50" placeholder="Type response and press Enter"
-                            class="form-control" v-model="ticket.response"></textarea>
-                        <button class="btn btn-primary" @click="sendResponse(ticket)">Submit</button>
+                        <div class="card-body">
+                            <h5 v-if="ticket.book" class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
+                            <p><b>Query</b>: {{ ticket.query }}</p>
+                            <p :style="{ color: ticket.status_display === 'Resolved' ? 'green' : 'inherit' }">
+                                <b>Status</b>: {{ ticket.status_display }}
+                            </p>
+                            <p v-if="ticket.status_display == 'Resolved'">
+                                <b>Response</b>: {{ ticket.response }}
+                            </p>
+                        </div>
+                        <button class="btn btn-primary" @click="sendResponse(ticket)">Reply</button>
                     </div>
                 </div>
             </div>
@@ -77,7 +82,6 @@ async function sendResponse(ticket: Ticket): Promise<void> {
         })
         ticket.response = ''
     } catch (error: any) {
-        console.error('Error sending response:', error.message)
         proxy.$store.dispatch('error/showError', {
             title: 'Unable to send response',
             message: 'Please try again later.'
@@ -86,9 +90,8 @@ async function sendResponse(ticket: Ticket): Promise<void> {
 }
 </script>
 
-<style>
+<style scoped>
 .container {
     border: 1px solid #fff;
-    min-height: 75vh;
 }
 </style>
