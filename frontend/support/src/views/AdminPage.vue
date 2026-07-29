@@ -17,7 +17,7 @@
                                 <b>Response</b>: {{ ticket.response }}
                             </p>
                         </div>
-                        <button class="btn btn-primary" @click="sendResponse(ticket)">Reply</button>
+                        <button class="btn btn-primary" @click="reply(ticket)">Reply</button>
                     </div>
                 </div>
             </div>
@@ -67,24 +67,12 @@ async function getTickets(): Promise<void> {
     }
 }
 
-async function sendResponse(ticket: Ticket): Promise<void> {
-    if (!ticket.response || !ticket.response.trim()) return
+async function reply(ticket: Ticket): Promise<void> {
+    if (!ticket || !ticket.id) return
 
-    const url = baseUrl + `/staff/tickets/${ticket.id}`
-    try {
-        await proxy.$axios.put(url, {
-            id: ticket.id,
-            query: ticket.query,
-            response: ticket.response.trim(),
-            status: 're'
-        })
-        ticket.response = ''
-    } catch (error: any) {
-        proxy.$store.dispatch('error/showError', {
-            title: 'Unable to send response',
-            message: 'Please try again later.'
-        })
-    }
+    proxy.$router.push(`/admin/reply/${ticket.id}`).catch((error: any) => {
+        console.error('Navigation error:', error)
+    })
 }
 </script>
 

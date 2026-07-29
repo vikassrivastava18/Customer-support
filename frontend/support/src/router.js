@@ -5,17 +5,16 @@ import HomePage from './views/HomePage.vue'
 const routes = [
     { path: '/', component: HomePage, meta: { requiresAuth: true } },
     { path: '/login', component: () => import('./views/LoginPage.vue')},
-    { path: '/books', component: () => import('./views/BookPage.vue')},
+    { path: '/books', component: () => import('./views/BookPage.vue'), meta: { requiresAuth: true }},
     { path: '/tickets', component: () => import('./views/TicketsPage.vue'), meta: { requiresAuth: true }},
     { path: '/create-ticket', component: () => import('./views/CreateTicket.vue'), meta: { requiresAuth: true }},
-    { path: '/admin', component: () => import('./views/AdminPage.vue'), meta: { requiresAuth: true }},
-]
+    { path: '/admin', component: () => import('./views/AdminPage.vue'), meta: { requiresAuth: true }},    
+    { path: '/admin/reply/:id', component: () => import('./views/AdminReply.vue'), meta: { requiresAuth: true } },]
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 })
-
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {

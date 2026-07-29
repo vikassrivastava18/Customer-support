@@ -14,6 +14,10 @@ class TicketListSerializer(serializers.ModelSerializer):
 
 
 class TicketUpdateSerializer(serializers.ModelSerializer):
+    status_display = serializers.CharField(
+        source='get_status_display',
+        read_only=True
+    )
     class Meta:
         model = Ticket
-        fields = ['query', 'id', 'response', 'status']
+        fields = ['query', 'id', 'response', 'status_display']
