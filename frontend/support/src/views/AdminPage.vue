@@ -1,12 +1,10 @@
 <template>
     <section class="container">
         <h4>All Tickets
-            <router-link to="/create-ticket" style="display: inline; background-color: #fff;" class="p-2 pb-3 ms-3">
-                <img src="../assets/create.png" width="35" alt="Create new ticket">
-            </router-link>
+            
         </h4>
         <div class="d-flex flex-row flex-wrap mb-3">
-            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
+            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 20rem;">
                 <div class="card-body">
                     <div class="mt-3">
                         <div class="card-body">

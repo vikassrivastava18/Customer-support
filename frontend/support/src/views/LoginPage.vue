@@ -34,7 +34,8 @@ interface LoginForm {
 
 interface TokenData {
     username: string
-    token: string
+    token: string,
+    staff: Boolean
 }
 
 const store = useStore();
@@ -57,8 +58,18 @@ const submit = async (): Promise<void> => {
             const data = res.data;
             localStorage.setItem('Authentication-Token', data.token);
             localStorage.setItem('Username', data.username)
-            await store.dispatch('auth/login');
-            await router.push({ path: '/' });
+            await store.dispatch('auth/login');            
+            // Check staff
+                if (data.staff) {
+                    localStorage.setItem('Is-Staff', 'true')
+                await store.dispatch('auth/setStaff');
+                await router.push({ path: '/admin' });                
+            }
+            else {
+                    localStorage.setItem('Is-Staff', 'false')
+                await router.push({ path: '/' });
+            }
+                        
         }
     } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response && (error.response.status === 401 || error.response.status === 400)) {

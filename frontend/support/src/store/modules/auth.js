@@ -1,4 +1,5 @@
-function check_auth() {
+
+function checkAuth() {
   const token = localStorage.getItem('Authentication-Token')
   if (token) {
     return true
@@ -6,10 +7,17 @@ function check_auth() {
   return false
 }
 
+function checkStaff() {
+  const isStaff = localStorage.getItem('Is-Staff')
+  console.log("isStaff", isStaff)
+  return isStaff === 'true'
+}
+
 export default {
   namespaced: true,
   state: {
-    isAuthenticated: check_auth()
+    isAuthenticated: checkAuth(),
+    isStaff: checkStaff()
   },
   mutations: {
     login(state) {
@@ -18,6 +26,13 @@ export default {
     logout(state) {
       state.isAuthenticated = false
       localStorage.removeItem('Authentication-Token')
+    },
+    setStaff(state) {
+      state.isStaff = true
+    },
+    removeStaff(state) {
+      state.isStaff = false
+      localStorage.removeItem('Is-Staff')
     }
   },
   actions: {
@@ -26,10 +41,17 @@ export default {
     },
     logout({ commit }) {
       commit('logout')
+    },
+    setStaff({ commit}) {
+      commit('setStaff')
+    },
+    removeStaff({ commit}) {
+      commit('removeStaff')
     }
   },
   getters: {
-    isAuthenticated: state => state.isAuthenticated
+    isAuthenticated: state => state.isAuthenticated,
+    isStaff: state => state.isStaff
   }
 }
 

@@ -9,9 +9,9 @@
 
         </h4>
         <div class="d-flex flex-row flex-wrap mb-3">
-            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 18rem;">
+            <div v-for="ticket in tickets" :key="ticket.id" class="card mt-4 mx-4" style="width: 20rem;">
                 <div class="card-body">
-                    <h5 class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
+                    <h5 v-if="ticket.book" class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
                     <p><b>Query</b>: {{ ticket.query }}</p>
                     <p :style="{ color: ticket.status_display === 'Resolved' ? 'green' : 'inherit' }">
                         <b>Status</b>: {{ ticket.status_display }}</p>
