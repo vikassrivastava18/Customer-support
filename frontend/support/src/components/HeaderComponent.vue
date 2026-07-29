@@ -74,4 +74,9 @@ h3, h4 {
 button {
     background-color: #fff;
 }
+
+.router-link-exact-active {
+  color: #42b983;
+  font-weight: bold;
+}
 </style>
