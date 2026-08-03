@@ -1,18 +1,4 @@
 services:
-
-  db:
-    image: postgres:16
-    container_name: postgres_db2
-    restart: always
-    environment:
-      POSTGRES_DB: support
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: hello2020
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   backend:
     build:
       context: .
@@ -21,16 +7,6 @@ services:
     restart: always
     ports:
       - "8000:8000"
-    environment:
-      - DEBUG=0
-      - ALLOWED_HOSTS=*
-      - DB_NAME=support
-      - DB_USER=postgres
-      - DB_PASSWORD=hello2020
-      - DB_HOST=db
-      - DB_PORT=5432
-    depends_on:
-      - db
 
   frontend:
     build:
@@ -40,6 +16,3 @@ services:
     restart: always
     ports:
       - "80:80"
-
-volumes:
-  postgres_data:

@@ -11,7 +11,7 @@
                 </div>
                 <!-- Content Column -->
                 <div class="col-lg-6">        
-                    <h4 class="mt-5">Welcome to BookLeaf support, {{ username? username: Author }}</h4>
+                    <h4 class="mt-5">Welcome, {{ username? username: Author }}</h4>
                     <!-- Paragraph -->        
                     <p class="text-secondary fs-5 lh-lg mt-4">                         
                         Get quick support for your published books by submitting a support ticket or browsing our Frequently Asked Questions (FAQs) on topics such as publishing, royalties, and more. 
