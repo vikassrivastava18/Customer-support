@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex justify-content-between p-2" id="headerDiv">
         <router-link to="/" class="nav-link text_white">
-            <img src="../../public/logo.png" width="80" alt="">
+            <img src="../../public/logo.png" width="100" alt="">
         </router-link>
 
         <div v-if="isStaff">
