@@ -1,6 +1,6 @@
 <template>    
-    <div class="loginC">        
-        <form @submit.prevent="submit" class="p-4 mt-4">
+    <div class="card mt-2">        
+        <form @submit.prevent="submit" class="p-4 mt-2">
             <h2 class="p-2 mt-0">Login</h2>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Username</label>
@@ -66,7 +66,7 @@ const submit = async (): Promise<void> => {
                 await router.push({ path: '/admin' });                
             }
             else {
-                    localStorage.setItem('Is-Staff', 'false')
+                localStorage.setItem('Is-Staff', 'false')
                 await router.push({ path: '/' });
             }
                         
@@ -89,17 +89,13 @@ const submit = async (): Promise<void> => {
 
 
 <style scoped>
-    .loginC {
-        height: 100vh;
+    .card {
         width: 40vw;
         margin: 0 auto;
     }
 
     form {
         width: 100%;
-        border-radius: 10px;
-        border: 1px solid;
-        border-radius: 5px;
     }
     h2 {
         text-align: center;

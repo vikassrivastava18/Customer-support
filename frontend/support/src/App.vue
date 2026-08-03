@@ -4,7 +4,7 @@
   <SuccessComponent />
   <ErrorComponent />
 
-  <main class="card">
+  <main class="card mt-2">
     <div class="card-body">
       <RouterView />
     </div>

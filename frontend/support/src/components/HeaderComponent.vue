@@ -1,9 +1,9 @@
 <template>
-    <div class="d-flex justify-content-between p-2" style="border: 1px solid black;
-        background-color: #404040;">
+    <div class="d-flex justify-content-between p-2" id="headerDiv">
         <router-link to="/" class="nav-link text_white">
-            BOOKLANE
+            <img src="../../public/logo.png" width="80" alt="">
         </router-link>
+
         <div v-if="isStaff">
             <router-link to="/admin" class="nav-link">
                 TICKETS
@@ -22,7 +22,7 @@
             </router-link>
         </div>
 
-        <div class="text-end" v-if="isAuthenticated">
+        <div class="text-end mt-2" v-if="isAuthenticated">
             <button type="button" class="btn btn-sm me-4" @click="logout">Logout</button>
         </div>
         <div class="text-end" v-else>
@@ -54,6 +54,12 @@ const login = () => {
 </script>
 
 <style scoped>
+#headerDiv {
+border: 1px solid black;
+background-color: #404040;
+border-radius: 5px;
+}
+
 ul {
     float: right;
 }
