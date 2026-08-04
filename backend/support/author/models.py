@@ -71,5 +71,7 @@ class Ticket(models.Model):
         ordering = ['-id']
 
     def __str__(self) -> str:
-        return f'{self.book.title}, Query: {self.query}, Status: {self.status}'
+        if self.book:
+            return f'{self.book.title}, Query: {self.query}, Status: {self.status}'
+        return f'Query: {self.query}, Status: {self.status}'
     
