@@ -54,42 +54,32 @@ const login = () => {
 </script>
 
 <style scoped>
-#headerDiv {
-border: 1px solid black;
-background-color: #404040;
-border-radius: 5px;
-}
+    h3,
+    h4 {
+        color: #e76774;
+    }
 
-ul {
-    float: right;
-}
+    .text_black {
+        color: black;
+    }
 
-h3,
-h4 {
-    color: #e76774;
-}
+    .text_white {
+        color: white;
+        font-size: smaller
+    }
 
-.text_black {
-    color: black;
-}
+    .nav-link {
+        padding: 0.3rem 1rem;
+        font-size: x-large;
+        line-height: 1.2;
+    }
 
-.text_white {
-    color: white;
-    font-size: smaller
-}
+    button {
+        background-color: #fff;
+    }
 
-.nav-link {
-    padding: 0.3rem 1rem;
-    font-size: x-large;
-    line-height: 1.2;
-}
-
-button {
-    background-color: #fff;
-}
-
-.router-link-exact-active {
-    color: #42b983;
-    font-weight: bold;
-}
+    .router-link-exact-active {
+        color: #42b983;
+        font-weight: bold;
+    }
 </style>
