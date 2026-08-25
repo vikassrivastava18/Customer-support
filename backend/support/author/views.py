@@ -45,42 +45,48 @@ class TicketCreateView(generics.CreateAPIView):
     queryset = Ticket.objects.all()
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
 
-        isbn = serializer.validated_data["isbn"]
-        query = serializer.validated_data["query"]
-        book = get_object_or_404(Book, isbn=isbn)
+            isbn = serializer.validated_data["isbn"]
+            query = serializer.validated_data["query"]
+            book = get_object_or_404(Book, isbn=isbn)
 
-        graph = Graph.build_graph()
-        session_id = request.user.username
-        config = {
-            "configurable": {
-                "thread_id": session_id
+            graph = Graph.build_graph()
+            session_id = request.user.username
+            config = {
+                "configurable": {
+                    "thread_id": session_id
+                }
             }
-        }
-        result = graph.invoke({
-            "book": isbn,
-            "messages": [HumanMessage(content=query)],
-        }, config=config)
+            result = graph.invoke({
+                "book": isbn,
+                "messages": [HumanMessage(content=query)],
+            }, config=config)
 
-        response_text = result["messages"][-1].content
+            response_text = result["messages"][-1].content
 
-        ticket = Ticket.objects.create(
-            query=query,
-            book=book,
-            response=response_text,
-        )
-        return Response(
-            {
-                "id": ticket.id,
-                "query": ticket.query,
-                "response": ticket.response,
-            },
-            status=status.HTTP_201_CREATED,
-        )
+            ticket = Ticket.objects.create(
+                query=query,
+                book=book,
+                response=response_text,
+            )
+            return Response(
+                {
+                    "id": ticket.id,
+                    "query": ticket.query,
+                    "response": ticket.response,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
 
-
+            
 class ChatView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SessionAuthentication, TokenAuthentication]

@@ -26,7 +26,7 @@ class TicketUpdateView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     queryset = Ticket.objects.all()
-    serializer_class = TicketUpdateSerializer
+    serializer_class = TicketUpdateSerializer   
 
 
 class AddJsonDataView(APIView):

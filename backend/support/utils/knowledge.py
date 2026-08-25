@@ -78,9 +78,8 @@ def similarity_search(query):
 
     # Create in-memory vector store (FAISS)
     vector_store = FAISS.from_documents(chunks, embeddings)
-
     # perform similarity search with score
-    results = vector_store.similarity_search_with_score(query, k=5)
+    results = vector_store.similarity_search_with_score(query, k=1)
 
     # unpack result
     doc, dist = results[0]
