@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import (SessionAuthentication,
                                            TokenAuthentication)
 from django.shortcuts import get_object_or_404
@@ -44,7 +44,7 @@ class TicketCreateView(generics.CreateAPIView):
     serializer_class = TicketCreateSerializer
     queryset = Ticket.objects.all()
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -107,4 +107,3 @@ class ChatView(APIView):
         response = result["messages"][-1].content
 
         return Response(response, status=status.HTTP_200_OK)
-

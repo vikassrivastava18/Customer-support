@@ -1,6 +1,5 @@
 <template>
     <div class="d-flex flex-row flex-wrap mb-3">
-
         <div class="card-body">
             <h5 v-if="ticket.book" class="card-title"><b>Book</b>: {{ ticket.book }}</h5>
             <p><b>Query</b>: {{ ticket.query }}</p>

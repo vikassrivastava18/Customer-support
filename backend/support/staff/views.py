@@ -15,6 +15,7 @@ from .serializers import (TicketListSerializer,
                           TicketUpdateSerializer)
 # Create your views here.
 
+
 class TicketListView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [SessionAuthentication, TokenAuthentication]
@@ -33,7 +34,7 @@ class AddJsonDataView(APIView):
     permission_classes = [IsAdminUser]
     authentication_classes = [SessionAuthentication, TokenAuthentication]
 
-    def post(self, request, *args, **kwargs):
+    def post(self):
         try:
             # Path to data.json
             file_path = Path(settings.BASE_DIR) / "utils" / "data.json"

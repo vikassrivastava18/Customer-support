@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-between p-2" id="headerDiv">
+    <div class="d-flex justify-content-between" id="headerDiv">
         <router-link to="/" class="nav-link text_white">
             <img src="../../public/logo.png" width="100" alt="">
         </router-link>
@@ -69,8 +69,9 @@ const login = () => {
     }
 
     .nav-link {
+        color: #fff;
         padding: 0.3rem 1rem;
-        font-size: x-large;
+        font-size: large;
         line-height: 1.2;
     }
 
@@ -81,5 +82,8 @@ const login = () => {
     .router-link-exact-active {
         color: #42b983;
         font-weight: bold;
+    }
+    #headerDiv {
+        background-color:#e76774
     }
 </style>
