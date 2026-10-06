@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex justify-content-between" id="headerDiv">
+    <div class="d-flex justify-content-between align-items-center" id="headerDiv">
         <router-link to="/" class="nav-link text_white">
             <img src="../../public/logo.png" width="100" alt="">
         </router-link>
@@ -22,7 +22,7 @@
             </router-link>
         </div>
 
-        <div class="text-end mt-2" v-if="isAuthenticated">
+        <div class="text-end" v-if="isAuthenticated">
             <button type="button" class="btn btn-sm me-4" @click="logout">Logout</button>
         </div>
         <div class="text-end" v-else>
