@@ -104,7 +104,7 @@ const submitForm = async (): Promise<void> => {
 /* Button used to open the chat form - fixed at the bottom of the page */
 .open-button {
   padding: 10px 40px;
-  background-color: rgb(64, 64, 64);
+  background-color: #6d5456;
   color: #fff;
   font-size: 17px;
   max-width: 300px;

@@ -84,6 +84,7 @@ const login = () => {
         font-weight: bold;
     }
     #headerDiv {
-        background-color:#e76774
+        background-color:#6d5456;
+        padding: 5px;
     }
 </style>
