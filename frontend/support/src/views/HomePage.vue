@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="info-grid">
+    <!-- <div class="info-grid">
       <article class="info-card">
         <div class="card-icon">📚</div>
         <h3>Book support</h3>
@@ -66,7 +66,7 @@
         <h3>Fast response</h3>
         <p>Open a ticket and get help from our support team without delays.</p>
       </article>
-    </div>
+    </div> -->
   </section>
 </template>
 
