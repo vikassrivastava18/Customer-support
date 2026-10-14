@@ -159,7 +159,7 @@ const submitForm = async (): Promise<void> => {
 
 /* Set a style for the submit/send button */
 .form-container .btn {
-  background-color: #42b983;
+  background-color: #83686b;
   color: white;
   font-size: 17px;
   padding: 10px 20px;
