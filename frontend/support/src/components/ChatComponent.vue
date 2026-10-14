@@ -112,8 +112,8 @@ const submitForm = async (): Promise<void> => {
   border: none;
   cursor: pointer;
   position: fixed;
-  bottom: 60px;
-  right: 28px;
+  bottom: 30px;
+  right: 20px;
 }
 
 /* The popup chat - hidden by default */
