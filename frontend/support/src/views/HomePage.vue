@@ -15,14 +15,6 @@
           work to resolve your issue as quickly as possible.
         </p>
 
-        <div class="actions">
-          <router-link to="/tickets" class="action-btn primary">
-            View tickets
-          </router-link>
-          <router-link to="/books" class="action-btn secondary">
-            My books
-          </router-link>
-        </div>
       </div>
 
       <div class="support-panel">
@@ -48,25 +40,6 @@
       </div>
     </div>
 
-    <!-- <div class="info-grid">
-      <article class="info-card">
-        <div class="card-icon">📚</div>
-        <h3>Book support</h3>
-        <p>Resolve publishing, formatting, and distribution issues quickly.</p>
-      </article>
-
-      <article class="info-card">
-        <div class="card-icon">💸</div>
-        <h3>Royalties</h3>
-        <p>Track earnings, payment questions, and sales-related inquiries.</p>
-      </article>
-
-      <article class="info-card">
-        <div class="card-icon">⚡</div>
-        <h3>Fast response</h3>
-        <p>Open a ticket and get help from our support team without delays.</p>
-      </article>
-    </div> -->
   </section>
 </template>
 
