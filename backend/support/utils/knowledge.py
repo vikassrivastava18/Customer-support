@@ -72,12 +72,12 @@ documents = [
     ),
 ]
 
-def similarity_search(query):
-    # get the info chunks
-    chunks = documents
+# Create in-memory vector store (FAISS)
+vector_store = FAISS.from_documents(documents, embeddings)
 
-    # Create in-memory vector store (FAISS)
-    vector_store = FAISS.from_documents(chunks, embeddings)
+
+def similarity_search(query):
+
     # perform similarity search with score
     results = vector_store.similarity_search_with_score(query, k=1)
 
